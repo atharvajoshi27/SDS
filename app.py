@@ -1,10 +1,10 @@
 from flask import Flask, render_template, url_for, flash, redirect
-
 from forms import Registration, Login
+from flask_sqlalchemy import SQLAlchemy
+from datetime import datetime
 
 
 app = Flask(__name__)
-
 app.config['SECRET_KEY'] = '29f625651624cb373965b968e5a33ccb'
 
 @app.route("/")

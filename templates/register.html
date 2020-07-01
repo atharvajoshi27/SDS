@@ -16,6 +16,32 @@
                 <h3 class="card-header bg-success text-white">Join Us</h3>
                 <div class="card-body">
                     <dl class="row">
+                        <dt class="mt-2 mt-sm-3 col-12 col-lg-3">First Name</dt>
+                        <dd class="mt-2 mt-sm-3 col-12 col-lg-9">
+                            {% if form.firstname.errors %}
+                                {{ form.firstname(class="form-control is-invalid", autocomplete="off", placeholder="First Name") }}
+                                <div class="invalid-feedback">
+                                    {% for error in form.firstname.errors %}
+                                        <span>{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                {{ form.firstname(class="form-control", autocomplete="off", placeholder="First Name") }}
+                            {% endif %}
+                        </dd>
+                        <dt class="mt-2 mt-sm-3 col-12 col-lg-3">Last Name</dt>
+                        <dd class="mt-2 mt-sm-3 col-12 col-lg-9">
+                            {% if form.lastname.errors %}
+                                {{ form.lastname(class="form-control is-invalid", autocomplete="off", placeholder="Last Name") }}
+                                <div class="invalid-feedback">
+                                    {% for error in form.lastname.errors %}
+                                        <span>{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                {{ form.lastname(class="form-control", autocomplete="off", placeholder="Last Name") }}
+                            {% endif %}
+                        </dd>
                         <dt class="mt-2 mt-sm-3 col-12 col-lg-3">Username</dt>
                         <dd class="mt-2 mt-sm-3 col-12 col-lg-9">
                             {% if form.username.errors %}
