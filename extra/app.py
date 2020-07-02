@@ -1,5 +1,5 @@
 from flask import Flask, render_template, url_for, flash, redirect, request
-from forms import Registration, Login
+from forms import Registration, Login, Update
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 from flask_bcrypt import Bcrypt
@@ -7,7 +7,7 @@ from models import *
 from flask_login import login_user, current_user, logout_user, login_required
 
 
-URL = "postgresql://postgres:password@localhost:5432/testdatabase"
+URL = "server://username:password@localhost:port/your_database_name"
 
 
 
@@ -64,6 +64,7 @@ def login():
             if next_page:
                 if next_page[0] == "/":
                     next_page = next_page[1:]
+                flash(f"Login Successful!", 'success')
                 return redirect(url_for(next_page))
             else:
                 flash(f"Login Successful!", 'success')
@@ -77,10 +78,24 @@ def logout():
     logout_user()
     return redirect(url_for('home'))
 
-@app.route("/account")
+@app.route("/account", methods=["GET", "POST"])
 @login_required
 def account():
-    return render_template("account.html", title=account)
+    form = Update()
+    if form.validate_on_submit():
+        current_user.firstname= form.firstname.data
+        current_user.lastname=form.lastname.data
+        current_user.username = form.username.data
+        current_user.email = form.email.data
+        db.session.commit()
+        flash('Account Updated!', 'success')
+    elif request.method == "GET":
+        form.firstname.data = current_user.firstname
+        form.lastname.data = current_user.lastname
+        form.username.data = current_user.username
+        form.email.data = current_user.email
+    image = url_for('static', filename='Profile/'+current_user.profile_picture)
+    return render_template("account.html", title=account, form=form, image=image)
 
     
 

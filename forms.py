@@ -4,6 +4,7 @@ from wtforms import validators
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
 from wtforms.fields.html5 import EmailField
 from models import User
+from flask_login import current_user
 
 
 class Registration(FlaskForm):
@@ -55,3 +56,29 @@ class Login(FlaskForm):
     remember = BooleanField('Remember Me')
 
     submit = SubmitField('Login')
+
+
+class Update(FlaskForm):
+    firstname = StringField('First Name', validators=[DataRequired(), Length(min=1, max=30)])
+
+    lastname = StringField('Last Name', validators=[DataRequired(), Length(min=1, max=30)])
+
+    username = StringField('Username', validators=[DataRequired(), Length(min=3, max=40)])
+
+    email = EmailField('Email', [validators.DataRequired(), validators.Email()])
+
+    submit = SubmitField('Sign Up')
+
+    def validate_username(self, username):
+        if username.data != current_user.username:
+            user = User.query.filter_by(username=username.data).first()
+            if user:
+                raise ValidationError('Username already exists!')
+
+    def validate_email(self, email):
+        if email.data != current_user.email:
+            user = User.query.filter_by(email=email.data).first()
+            if user:
+                raise ValidationError('Email already exists!')
+
+        

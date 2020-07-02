@@ -1,5 +1,10 @@
 {% extends "layout.html" %}
+<script>
+    document.addEventListener("DOMContentLoaded", () =>{
+        document.querySelector('#firstname1').defaultValue = current_user.firstname;
 
+    });
+</script>
 {% block title %}
 Account
 {% endblock %}
@@ -30,6 +35,121 @@ Account
 </nav>
 {% endblock %}
 {% block body %}
-    <h1>{{ current_user.username }}</h1>
-    <h2>How's gone everybody</h2>
+    <div class="container" style="padding-top: 120px;">
+        <div class="col-12 col-md-6" style="border-radius: 20px; border-color:purple; border: 0.5px solid;">
+            <div class="row row-content" >
+                <div class="col-6 col-md-2" >
+                    <img src="{{ image }}" alt="User" class="account-img rounded-circle">
+                </div>
+                <div class="offset-sm-3 col-6 col-md-5 mt-4">
+                    <div class="row row-content">
+                        <h4>{{ current_user.username }}</h4>
+                    </div>
+                    <div class="row row-content">
+                        <small>{{ current_user.email }}</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-md-6">
+            <div class="col-12 mt-4">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                        {% if messages %}
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ category }}">
+                            {{ message }}
+                            </div>
+                        {% endfor %}
+                        {% endif %}
+            {% endwith %}
+        </div>
+        </div>
+        <div class="col-12 col-md-6 mt-4">
+            <div class="col-12">
+                <form action="" method="POST">
+                    {{ form.hidden_tag() }}
+                <div class="card">
+                    <h3 class="card-header bg-danger text-white">Login In</h3>
+                    <div class="card-body">
+                        <dl class="row">
+                            <dt class="mt-2 mt-sm-3 col-12">First Name</dt>
+                            <dd class="mt-2 mt-sm-3 col-12">
+                                {% if form.firstname.errors %}
+                                    {{ form.firstname(class="form-control is-invalid", autocomplete="off", placeholder="Enter firstname", id="firstname1") }}
+                                    <div class="invalid-feedback">
+                                        {% for error in form.firstname.errors %}
+                                            <span>{{ error }}</span>
+                                        {% endfor %}
+                                    </div>
+                                {% else %}
+                                    {{ form.firstname(class="form-control", autocomplete="off", placeholder="Enter firstname", id="firstname") }}
+                                {% endif %}
+                            </dd>
+                            <dt class="mt-2 mt-sm-3 col-12">Last Name</dt>
+                            <dd class="mt-2 mt-sm-3 col-12">
+                                {% if form.lastname.errors %}
+                                    {{ form.lastname(class="form-control is-invalid", autocomplete="off", placeholder="Enter lastname", id="lastname") }}
+                                    <div class="invalid-feedback">
+                                        {% for error in form.lastname.errors %}
+                                            <span>{{ error }}</span>
+                                        {% endfor %}
+                                    </div>
+                                {% else %}
+                                    {{ form.lastname(class="form-control", autocomplete="off", placeholder="Enter lastname", id="lastname") }}
+                                {% endif %}
+                            </dd>
+                            <dt class="mt-2 mt-sm-3 col-12">Username</dt>
+                            <dd class="mt-2 mt-sm-3 col-12">
+                                {% if form.username.errors %}
+                                    {{ form.username(class="form-control is-invalid", autocomplete="off", placeholder="Enter username", id="username") }}
+                                    <div class="invalid-feedback">
+                                        {% for error in form.username.errors %}
+                                            <span>{{ error }}</span>
+                                        {% endfor %}
+                                    </div>
+                                {% else %}
+                                    {{ form.username(class="form-control", autocomplete="off", placeholder="Enter username", id="username") }}
+                                {% endif %}
+                            </dd>
+                            <dt class="mt-2 mt-sm-3 col-12">Email</dt>
+                            <dd class="mt-2 mt-sm-3 col-12">
+                                {% if form.email.errors %}
+                                    {{ form.email(class="form-control is-invalid", autocomplete="off", placeholder="Enter email", id="email") }}
+                                    <div class="invalid-feedback">
+                                        {% for error in form.email.errors %}
+                                            <span>{{ error }}</span>
+                                        {% endfor %}
+                                    </div>
+                                {% else %}
+                                    {{ form.email(class="form-control", autocomplete="off", placeholder="Enter Email", id="email") }}
+                                {% endif %}
+                            </dd>
+                            
+                            <dt class="mt-2 mt-sm-3 col-12"></dt>
+                            <dd class="mt-2 mt-sm-3 col-12">
+                                {{ form.submit(class="btn btn-outline-info") }}
+                            </dd>
+                        </dl>
+                    </div>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
 {% endblock %}
+
+<!-- <div class="container" style="padding-top: 120px;">
+    <div class="row row-content">
+        <div class="col-10 col-sm-6">
+        <div class="content-section">
+        <div class="media">
+            <img src="{{ image }}" alt="The User" class="rounded-circle account-img">
+            <div class="media-body">
+                <h2 class="account-heading">{{ current_user.username }}</h2>
+                <p class="text-secondary">{{ current_user.email }}</p>
+            </div>
+        </div>
+        </div>
+        </div>    
+    </div>
+</div> -->
