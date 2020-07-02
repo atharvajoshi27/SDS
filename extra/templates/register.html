@@ -1,0 +1,157 @@
+{% extends "layout.html" %}
+
+{% block title %}
+   Register
+{% endblock %}
+
+{% block bar %}
+<nav class="navbar navbar-dark navbar-expand-sm fixed-top">
+    <div class="container">
+        <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#Navbar">
+                <span class="navbar-toggler-icon"></span>
+        </button>
+        <a class="navbar-brand mr-auto" href="#"></a>
+        
+        <div class="collapse navbar-collapse" id="Navbar">
+            <ul class="navbar-nav mr-auto">
+                
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('home') }}"><span class="fa fa-home fa-lg">Home</span></a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('about') }}"><span class="fa fa-info fa-lg">About</span></a></li>
+                {% if current_user.is_authenticated %}
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('logout') }}"><span class="fa fa-list fa-lg">Log Out</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('account') }}"><span class="fa fa-address-card fa-lg">Account</span></a></li>
+                {% else %}
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('login') }}"><span class="fa fa-list fa-lg">Log In</span></a></li>
+                    <li class="nav-item active"><a class="nav-link" href="{{ url_for('register') }}"><span class="fa fa-address-card fa-lg">Sign Up</span></a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>
+{% endblock %}
+
+
+{% block head %}
+    <div class="container">
+
+    </div>
+    <!-- <div class="container">
+        <div class="row row-header">
+            <div class="col-12 col-sm-6">
+                <h1>Ristorante con Fusion</h1>
+                <p>We take inspiration from the World's best cuisines, and create a unique fusion experience. Our lipsmacking creations will tickle your culinary senses!</p>
+            </div>
+            <div class="col-12 col-sm align-self-align">
+                <img src="img/logo.png" alt="" class="img-fluid">
+            </div>
+            <div class="col-12 col-sm">
+            </div>
+        </div>
+    </div> -->
+{% endblock %}
+
+{% block body %}
+    <div class="container" style="padding: 100px;">
+        <div class="row row-content">
+            <div class="col-12 col-sm-2"></div>
+            <div class="col-12 col-sm-8">
+                <form action="" method="POST">
+                    {{ form.hidden_tag() }}
+                <div class="card">
+                    <h3 class="card-header bg-danger text-white">Join Us</h3>
+                    <div class="card-body">
+                        <dl class="row">
+                            <dt class="mt-2 mt-sm-3 col-12 col-lg-3">First Name</dt>
+                            <dd class="mt-2 mt-sm-3 col-12 col-lg-9">
+                                {% if form.firstname.errors %}
+                                    {{ form.firstname(class="form-control is-invalid", autocomplete="off", placeholder="First Name") }}
+                                    <div class="invalid-feedback">
+                                        {% for error in form.firstname.errors %}
+                                            <span>{{ error }}</span>
+                                        {% endfor %}
+                                    </div>
+                                {% else %}
+                                    {{ form.firstname(class="form-control", autocomplete="off", placeholder="First Name") }}
+                                {% endif %}
+                            </dd>
+                            <dt class="mt-2 mt-sm-3 col-12 col-lg-3">Last Name</dt>
+                            <dd class="mt-2 mt-sm-3 col-12 col-lg-9">
+                                {% if form.lastname.errors %}
+                                    {{ form.lastname(class="form-control is-invalid", autocomplete="off", placeholder="Last Name") }}
+                                    <div class="invalid-feedback">
+                                        {% for error in form.lastname.errors %}
+                                            <span>{{ error }}</span>
+                                        {% endfor %}
+                                    </div>
+                                {% else %}
+                                    {{ form.lastname(class="form-control", autocomplete="off", placeholder="Last Name") }}
+                                {% endif %}
+                            </dd>
+                            <dt class="mt-2 mt-sm-3 col-12 col-lg-3">Username</dt>
+                            <dd class="mt-2 mt-sm-3 col-12 col-lg-9">
+                                {% if form.username.errors %}
+                                    {{ form.username(class="form-control is-invalid", autocomplete="off", placeholder="Enter Username") }}
+                                    <div class="invalid-feedback">
+                                        {% for error in form.username.errors %}
+                                            <span>{{ error }}</span>
+                                        {% endfor %}
+                                    </div>
+                                {% else %}
+                                    {{ form.username(class="form-control", autocomplete="off", placeholder="Enter Username") }}
+                                {% endif %}
+                            </dd>
+                            <dt class="mt-2 mt-sm-3 col-12 col-lg-3">Email</dt>
+                            <dd class="mt-2 mt-sm-3 col-12 col-lg-9">
+                                {% if form.email.errors %}
+                                    {{ form.email(class="form-control is-invalid", autocomplete="off", placeholder="Enter email") }}
+                                    <div class="invalid-feedback">
+                                        {% for error in form.email.errors %}
+                                            <span>{{ error }}</span>
+                                        {% endfor %}
+                                    </div>
+                                {% else %}
+                                    {{ form.email(class="form-control", autocomplete="off", placeholder="Enter Email") }}
+                                {% endif %}
+                            </dd>
+                            <dt class="mt-2 mt-sm-3 col-12 col-lg-3">Password</dt>
+                            <dd class="mt-2 mt-sm-3 col-12 col-lg-9">
+                                {% if form.password.errors %}
+                                    {{ form.password(class="form-control is-invalid", autocomplete="off", placeholder="Enter Password") }}
+                                    <div class="invalid-feedback">
+                                        {% for error in form.password.errors %}
+                                            <span>{{ error }}</span>
+                                        {% endfor %}
+                                    </div>
+                                {% else %}
+                                    {{ form.password(class="form-control", autocomplete="off", placeholder="Enter Password") }}
+                                {% endif %}
+                            </dd>
+                            <dt class="mt-2 mt-sm-3 col-12 col-lg-3">Confirm Password</dt>
+                            <dd class="mt-2 mt-sm-3 col-12 col-lg-9">
+                                {% if form.confirm_password.errors %}
+                                    {{ form.confirm_password(class="form-control is-invalid", autocomplete="off", placeholder="Confirm Password") }}
+                                    <div class="invalid-feedback">
+                                        {% for error in form.confirm_password.errors %}
+                                            <span>{{ error }}</span>
+                                        {% endfor %}
+                                    </div>
+                                {% else %}
+                                    {{ form.confirm_password(class="form-control", autocomplete="off", placeholder="Confirm Password") }}
+                                {% endif %}
+                            </dd>
+                            <dt class="mt-2 mt-sm-3 col-12 col-lg-3"></dt>
+                            <dd class="mt-2 mt-sm-3 col-12 col-lg-9">{{ form.submit(class="btn btn-outline-info") }}</dd>
+                        </dl>
+                    </div>
+                    <div class="offset-1 offset-sm-3 border-top mb-4">
+                        <small class="text-muted">
+                            Already Have An Account?<a href="{{ url_for('login') }}"> <u>Sign In</u></a>
+                        </small>
+                    </div>
+                </div>
+                </form>
+            </div>
+            <div class="col-12 col-sm-2"></div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,32 @@
+{% extends "layout.html" %}
+
+{% block title %}
+About
+{% endblock %}
+
+{% block bar %}
+<nav class="navbar navbar-dark navbar-expand-sm fixed-top">
+    <div class="container">
+        <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#Navbar">
+                <span class="navbar-toggler-icon"></span>
+        </button>
+        <a class="navbar-brand mr-auto" href="#"></a>
+        
+        <div class="collapse navbar-collapse" id="Navbar">
+            <ul class="navbar-nav mr-auto">
+                
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('home') }}"><span class="fa fa-home fa-lg">Home</span></a></li>
+                <li class="nav-item active"><a class="nav-link" href="url_for('about')"><span class="fa fa-info fa-lg">About</span></a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('login') }}"><span class="fa fa-list fa-lg">Log In</span></a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('login') }}"><span class="fa fa-address-card fa-lg">Sign Up</span></a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+{% endblock %}
+
+{% block head %}
+{% endblock %}
+
+{% block body %}
+{% endblock %}

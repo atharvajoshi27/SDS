@@ -1,0 +1,179 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Login
+{% endblock %}
+
+{% block bar %}
+<nav class="navbar navbar-dark navbar-expand-sm fixed-top">
+    <div class="container">
+        <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#Navbar">
+                <span class="navbar-toggler-icon"></span>
+        </button>
+        <a class="navbar-brand mr-auto" href="#"></a>
+        
+        <div class="collapse navbar-collapse" id="Navbar">
+            <ul class="navbar-nav mr-auto">
+                
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('home') }}"><span class="fa fa-home fa-lg">Home</span></a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('about') }}"><span class="fa fa-info fa-lg">About</span></a></li>
+                {% if current_user.is_authenticated %}
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('logout') }}"><span class="fa fa-list fa-lg">Log Out</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('account') }}"><span class="fa fa-address-card fa-lg">Account</span></a></li>
+                {% else %}
+                    <li class="nav-item active"><a class="nav-link" href="{{ url_for('login') }}"><span class="fa fa-list fa-lg">Log In</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('register') }}"><span class="fa fa-address-card fa-lg">Sign Up</span></a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>
+{% endblock %}
+
+
+
+{% block head %}
+    {% if False %}
+    <div class="jumbotron">
+        <h2 style="text-align: center;">
+            Personal Assistant
+        </h2>
+    </div>
+    {% endif %}
+{% endblock %}
+
+
+{% block body %}
+
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        <div class="container" style="padding-top: 80px;">
+            <div class="row row-content">
+                <div class="col-12 col-sm-2"></div>
+                <div class="col-12 col-sm-8">
+                    {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">
+                        {{ message }}
+                        </div>
+                    {% endfor %}
+                    {% endif %}
+                </div>
+                <div class="col-12 col-sm-2"></div>
+            </div>
+        </div>
+    {% endwith %}
+
+{% if get_flashed_messages(with_categories=true) %}
+    <div class="container" style="padding-top: 10px;">
+{% else %}
+    <div class="container" style="padding-top: 120px;">
+{% endif %}
+
+    <div class="row row-content">
+        <div class="col-12 col-sm-2">
+
+        </div>
+        <div class="col-12 col-sm-8">
+            <form action="" method="POST">
+                {{ form.hidden_tag() }}
+            <div class="card">
+                <h3 class="card-header bg-danger text-white">Login In</h3>
+                <div class="card-body">
+                    <dl class="row">
+                        <dt class="mt-2 mt-sm-3 col-12 col-lg-3">Email</dt>
+                        <dd class="mt-2 mt-sm-3 col-12 col-lg-9">
+                            {% if form.email.errors %}
+                                {{ form.email(class="form-control is-invalid", autocomplete="off", placeholder="Enter email") }}
+                                <div class="invalid-feedback">
+                                    {% for error in form.email.errors %}
+                                        <span>{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                {{ form.email(class="form-control", autocomplete="off", placeholder="Enter Email") }}
+                            {% endif %}
+                        </dd>
+                        <dt class="mt-2 mt-sm-3 col-12 col-lg-3">Password</dt>
+                        <dd class="mt-2 mt-sm-3 col-12 col-lg-9">
+                            {% if form.password.errors %}
+                                {{ form.password(class="form-control is-invalid", autocomplete="off", placeholder="Enter Password") }}
+                                <div class="invalid-feedback">
+                                    {% for error in form.password.errors %}
+                                        <span>{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                {{ form.password(class="form-control", autocomplete="off", placeholder="Enter Password") }}
+                            {% endif %}
+                        </dd>
+                        <dt class="mt-2 mt-sm-3 col-12 col-lg-3"></dt>
+                        <dd class="mt-2 mt-sm-3 col-12 col-lg-9">
+                            <div class="form-check">
+                                {{ form.remember(class="form-check-input") }}
+                            <b>{{ form.remember.label(class="form-check-label") }}</b>
+                            </div>
+                        </dd>
+                        <dt class="mt-2 mt-sm-3 col-12 col-lg-3"></dt>
+                        <dd class="mt-2 mt-sm-3 col-12 col-lg-9">
+                            {{ form.submit(class="btn btn-outline-info") }}
+                            <label for="" class="ml-3">
+                                <a href="#"><small><u>Forgot Password?</u></small></a>
+                            </label>
+                        </dd>
+                    </dl>
+                </div>
+                <div class="offset-1 offset-sm-3 border-top mb-4">
+                    <small class="text-muted">
+                        Don't Have An Account?<a href="{{ url_for('register') }}"> <u>Sign Up</u></a>
+                    </small>
+                </div>
+            </div>
+            </form>
+        </div>
+        <div class="col-12 col-sm-2">
+
+        </div>
+    </div>
+</div>
+<!-- <div class="container justify-content-center">
+    <div class="row row-content">
+        <div class="col-12">
+        <h3>Log In</h3>
+        </div>
+        <div class="col-12 col-md-9">
+            <form method="POST">
+            <fieldset class="form-group">
+                {{ form.hidden_tag() }}
+                <div class="form-group row">
+                    <label for="emailid" class="col-md-2 col-form-label">Email</label>
+                    <div class="col-md-10">
+                        {{ form.email(class="form-control", id="emailid", placeholder="Email", autocomplete="off") }}
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="password" class="col-md-2 col-form-label">Password</label>
+                    <div class="col-md-10">
+                        {{ form.password(class="form-control", id="password", placeholder="Password", autocomplete="off") }}
+                    </div>
+                </div>
+        
+                <div class="form-group row">
+                    <div class="offset-md-2 col-md-10">
+                        {{ form.submit(class="form-control btn btn-primary") }}
+                    </div>
+                </div>
+                <div class=" form-group row border-top pt-3">
+                    <div class="offset-md-2 col-md-10">
+                        <small class="text-muted">
+                            Don't Have An Account? <a href="{{ url_for('register') }}" class="ml-2">Sign Up</a>
+                        </small>
+                    </div>
+                </div>
+            </fieldset>
+            </form>
+            
+        </div>   
+    </div>
+</div> -->
+{% endblock %}

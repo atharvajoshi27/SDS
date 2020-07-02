@@ -7,8 +7,8 @@ from models import *
 from flask_login import login_user, current_user, logout_user, login_required
 
 
+URL = "postgresql://postgres:password@localhost:5432/testdatabase"
 
-URL = "postgresql://postgres:username@localhost:5432/name_of_database"
 
 
 app = Flask(__name__)
@@ -23,6 +23,7 @@ login_manager.login_view = 'login'
 login_manager.login_message_category = 'info'
 
 @app.route("/")
+@app.route("/home")
 def home():
     return render_template('home.html')
 
@@ -59,10 +60,13 @@ def login():
         # account route and not home route so
         # to redirect user 
             next_page = request.args.get('next')
+            print(type(next_page))
             if next_page:
-                print(next_page)
+                if next_page[0] == "/":
+                    next_page = next_page[1:]
                 return redirect(url_for(next_page))
             else:
+                flash(f"Login Successful!", 'success')
                 return redirect(url_for('home'))
         else:
             flash(f"Login unsuccessful! Please check email and password again!", 'danger')
@@ -76,7 +80,7 @@ def logout():
 @app.route("/account")
 @login_required
 def account():
-    render_template("account.html", title=account)
+    return render_template("account.html", title=account)
 
     
 
