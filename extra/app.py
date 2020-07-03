@@ -5,6 +5,9 @@ from datetime import datetime
 from flask_bcrypt import Bcrypt
 from models import *
 from flask_login import login_user, current_user, logout_user, login_required
+import secrets
+import os
+from PIL import Image
 
 
 URL = "server://username:password@localhost:port/your_database_name"
@@ -78,11 +81,27 @@ def logout():
     logout_user()
     return redirect(url_for('home'))
 
+def save_image(profile):
+    random_name = secrets.token_hex(8)
+    fileName, fileExtension = os.path.splitext(profile.filename)
+    image_filename = random_name +  fileExtension
+    image_path = os.path.join(app.root_path, 'static/Profile', image_filename)
+    image_size = (125, 125)
+    
+    i = Image.open(profile)
+    i.thumbnail(image_size)
+    i.save(image_path)
+
+    return image_filename
+
 @app.route("/account", methods=["GET", "POST"])
 @login_required
 def account():
     form = Update()
     if form.validate_on_submit():
+        if form.profile.data:
+            image_filename = save_image(form.profile.data)
+            current_user.profile_picture = image_filename
         current_user.firstname= form.firstname.data
         current_user.lastname=form.lastname.data
         current_user.username = form.username.data

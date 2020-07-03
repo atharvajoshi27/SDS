@@ -1,10 +1,5 @@
 {% extends "layout.html" %}
-<script>
-    document.addEventListener("DOMContentLoaded", () =>{
-        document.querySelector('#firstname1').defaultValue = current_user.firstname;
 
-    });
-</script>
 {% block title %}
 Account
 {% endblock %}
@@ -38,10 +33,10 @@ Account
     <div class="container" style="padding-top: 120px;">
         <div class="col-12 col-md-6" style="border-radius: 20px; border-color:purple; border: 0.5px solid;">
             <div class="row row-content" >
-                <div class="col-6 col-md-2" >
+                <div class="col-6 col-md-2" style="padding-top : 10px;" >
                     <img src="{{ image }}" alt="User" class="account-img rounded-circle">
                 </div>
-                <div class="offset-sm-3 col-6 col-md-5 mt-4">
+                <div class="offset-sm-3 col-6 col-md-5 mt-4" style="padding-top: 15px;">
                     <div class="row row-content">
                         <h4>{{ current_user.username }}</h4>
                     </div>
@@ -56,7 +51,9 @@ Account
             {% with messages = get_flashed_messages(with_categories=true) %}
                         {% if messages %}
                         {% for category, message in messages %}
-                            <div class="alert alert-{{ category }}">
+                            <div class="alert alert-{{ category }} alert-dismissable">
+                            
+                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true" style="border: none; outline: none;">×</button>
                             {{ message }}
                             </div>
                         {% endfor %}
@@ -66,10 +63,10 @@ Account
         </div>
         <div class="col-12 col-md-6 mt-4">
             <div class="col-12">
-                <form action="" method="POST">
+                <form action="" method="POST" enctype="multipart/form-data">
                     {{ form.hidden_tag() }}
                 <div class="card">
-                    <h3 class="card-header bg-danger text-white">Login In</h3>
+                    <h3 class="card-header bg-info text-white">Your Info</h3>
                     <div class="card-body">
                         <dl class="row">
                             <dt class="mt-2 mt-sm-3 col-12">First Name</dt>
@@ -124,10 +121,22 @@ Account
                                     {{ form.email(class="form-control", autocomplete="off", placeholder="Enter Email", id="email") }}
                                 {% endif %}
                             </dd>
-                            
+                            <dt class="mt-2 mt-sm-3 col-12">Profile Picture</dt>
+                            <dd class="mt-2 mt-sm-3 col-12">
+                                
+                                 {{ form.profile() }}
+                                
+                                {% if form.profile.errors %}
+                                    <br>
+                                    {% for error in form.profile.errors %}
+                                        <span class="text-danger">{{ error }}</span><br>
+                                    {% endfor %}
+                                {% endif %}
+
+                            </dd>
                             <dt class="mt-2 mt-sm-3 col-12"></dt>
                             <dd class="mt-2 mt-sm-3 col-12">
-                                {{ form.submit(class="btn btn-outline-info") }}
+                                {{ form.submit(class="btn btn-danger") }}
                             </dd>
                         </dl>
                     </div>

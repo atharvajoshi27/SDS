@@ -5,6 +5,7 @@ from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationE
 from wtforms.fields.html5 import EmailField
 from models import User
 from flask_login import current_user
+from flask_wtf.file import FileField, FileAllowed
 
 class Registration(FlaskForm):
     firstname = StringField('First Name', validators=[DataRequired(), Length(min=1, max=30)])
@@ -64,6 +65,8 @@ class Update(FlaskForm):
     username = StringField('Username', validators=[DataRequired(), Length(min=3, max=40)])
 
     email = EmailField('Email', [validators.DataRequired(), validators.Email()])
+
+    profile =   FileField('Profile Picture', validators=[FileAllowed(['jpg', 'png'])]) 
 
     submit = SubmitField('Update')
 
