@@ -1,0 +1,119 @@
+{% extends "layout2.html" %}
+
+{% block title %}
+    Anniversaries
+{% endblock %}
+{% block content %}
+
+<main role="main" class="container"">
+    <div class="row">
+        <div class="col-md-8">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">
+                    {{ message }}
+                </div>
+                {% endfor %}
+            {% endif %}
+            {% endwith %}
+ 
+        <div class="container mb-4">
+            <div class="row row-content">
+                <div class="col-12 col-md-2"></div>
+                <div class="col-12 col-md-8">
+                    <a href="{{ url_for('anniversary') }}" type="button" class="btn btn-success">All Anniversaries</a>
+                </div>
+                <div class="col-12 col-md-2"></div>
+            </div>
+        </div> 
+        <div class="col-12 col-md-8">
+            <div class="content-section">
+            <form method="POST" action="">
+                {{ form.hidden_tag() }}
+            
+                <legend class="border-bottom mb-4">
+                 <h4>{{ legend }} Anniversary</h4>
+                </legend>
+                <div class="form-group">
+                    {{ form.name.label(class="form-control-label") }}
+                    {% if form.name.errors %}
+                        {{ form.name(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.name.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.name(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    {{ form.types.label(class="form-control-label") }}
+                    {% if form.types.errors %}
+                        {{ form.types(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.types.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.types(class="form-control form-control-lg") }}
+                       
+                    {% endif %}
+                </div>
+                
+                <div class="form-group">
+                    {{ form.date.label(class="form-control-label") }}
+                    {% if form.date.errors %}
+                        {{ form.date(class="form-control form-control-lg is-invalid", type="date") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.date.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.date(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    {{ form.note.label(class="form-control-label") }}
+
+                    {% if form.note.errors %}
+                        {{ form.note(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.note.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.note(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+            </fieldset>
+            <div class="form-group">
+                {{ form.submit(class="btn btn-outline-info") }}
+            </div>
+            </form>
+            </div>
+
+
+    <!--  -->
+        </div>
+    </div>
+        <div class="col-md-4">
+            <div class="content-section">
+                <h3>Our Sidebar</h3>
+                <p class='text-muted'>You can put any information here you'd like.
+                    <ul class="list-group">
+                    <li class="list-group-item list-group-item-light active">Anniversaries</li>
+                    <li class="list-group-item list-group-item-light">Tasks</li>
+                    <li class="list-group-item list-group-item-light">Achievements</li>
+                    <li class="list-group-item list-group-item-light">Expenses</li>
+                    </ul>
+                </p>
+            </div>
+    </div>
+</div>
+</main>
+{% endblock %}

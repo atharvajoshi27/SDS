@@ -1,11 +1,12 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, BooleanField
+from wtforms import StringField, PasswordField, SubmitField, BooleanField, TextAreaField, SelectField
 from wtforms import validators
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
-from wtforms.fields.html5 import EmailField
+from wtforms.fields.html5 import EmailField, DateField
 from models import User
 from flask_login import current_user
 from flask_wtf.file import FileField, FileAllowed
+from datetime import datetime
 
 class Registration(FlaskForm):
     firstname = StringField('First Name', validators=[DataRequired(), Length(min=1, max=30)])
@@ -81,4 +82,13 @@ class Update(FlaskForm):
             user = User.query.filter_by(email=email.data).first()
             if user:
                 raise ValidationError('Email already exists!')
+
+
+
+class AnniversaryForm(FlaskForm):
+    name = StringField('First Name', validators=[DataRequired(), Length(min=1, max=30)])
+    date = DateField('Date', validators=[DataRequired()], format='%Y-%m-%d')
+    types = SelectField('Type', validators=[DataRequired()], choices=['Birth Anniversary', 'Marriage Anniversary'], validate_choice=False)
+    note = TextAreaField('Note')
+    submit = SubmitField('Add')
 

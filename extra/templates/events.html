@@ -1,0 +1,81 @@
+{% extends "layout2.html" %}
+
+{% block title %}
+    Anniversaries
+{% endblock %}
+
+
+{% block content %}
+
+<main role="main" class="container"">
+    <div class="row">
+    <div class="col-md-8">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">
+                {{ message }}
+            </div>
+            {% endfor %}
+        {% endif %}
+        {% endwith %}
+    
+
+
+<!--  -->
+
+{% for anniversary in anniversaries %}
+<div class="col-12 col-md-8">
+    <div class="col-12 mt-2">
+        <div class="card">
+            <h5 class="card-header bg-info text-white">{{ anniversary.types }}</h5>
+            <div class="card-body">
+                <p class="h6" style="line-height: 35px;">
+                    {{ anniversary.name }} has {{ anniversary.types }} on <mark style="color: green;">{{ anniversary.date }}</mark style="color: green;">
+                </p>
+            </div>  
+            <div class="container">
+                <div class="row row-content">
+                    <div class="col-6">
+                        <form action="">
+                            <div class="form-group ml-5">
+                                <button class="btn btn-primary" style="width: 100px;">Edit</button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col-6">
+                        <form action="">
+                            <div class="form-group mr-5">
+                                <button class="btn btn-danger" style="width: 100px;">Delete</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div> 
+        </div>
+        </form>
+    </div>
+</div>
+{% else %}
+<h2>No anniversary today ;(</h2>
+{% endfor %}
+
+<!--  -->
+</div>
+<div class="col-md-4">
+    <div class="content-section">
+    <h3>Saved Info</h3>
+    <p class='text-muted'>You can put any information here you'd like.
+        <ul class="list-group">
+        <li class="list-group-item list-group-item-light"><a href="{{ url_for('anniversary') }}">Anniversaries</a></li>
+        <li class="list-group-item list-group-item-light">Tasks</li>
+        <li class="list-group-item list-group-item-light">Achievements</li>
+        <li class="list-group-item list-group-item-light">Expenses</li>
+        </ul>
+    </p>
+    </div>
+</div>
+</div>
+</main>
+{% endblock %}
+

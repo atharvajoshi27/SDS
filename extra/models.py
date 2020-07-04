@@ -21,6 +21,7 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(60), unique=False, nullable=False)
     profile_picture = db.Column(db.String(50), default='image.jpg', nullable=True)
     posts = db.relationship('Post', backref='author', lazy=True)
+    anniversary = db.relationship('Anniversary', backref='relative', lazy=True)
 
     def __repr__(self):
         return f"User('{self.firstname}', '{self.lastname}')"
@@ -36,3 +37,12 @@ class Post(db.Model):
     
     def __repr__(self):
         return f"Post({self.title}, '{self.date_posted}')"
+
+class Anniversary(db.Model):
+    __tablename__ = "anniversary"
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(30), nullable=False)
+    date = db.Column(db.Date, nullable=False)
+    types = db.Column(db.String(30), nullable=False)
+    note = db.Column(db.Text, nullable=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)

@@ -1,0 +1,106 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    New
+{% endblock %}
+
+{% block bar %}
+
+{% endblock %}
+
+
+
+{% block head %}
+{% endblock %}
+
+
+
+{% block body %}
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+        <div class="container" style="padding-top: 80px;">
+            <div class="row row-content">
+                <div class="col-12 col-sm-2"></div>
+                <div class="col-12 col-sm-8">
+                    {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">
+                        {{ message }}
+                        </div>
+                    {% endfor %}
+                    {% endif %}
+                </div>
+                <div class="col-12 col-sm-2"></div>
+            </div>
+        </div>
+    {% endwith %}
+
+{% if get_flashed_messages(with_categories=true) %}
+    <div class="container" style="padding-top: 10px;">
+{% else %}
+    <div class="container" style="padding-top: 120px;">
+{% endif %}
+
+    <div class="row row-content">
+        <div class="col-12 col-sm-2">
+
+        </div>
+        <div class="col-12 col-sm-8">
+            <form action="" method="POST">
+                
+            <div class="card">
+                <h3 class="card-header bg-danger text-white">Log In</h3>
+                <div class="card-body">
+                    <dl class="row">
+                        <dt class="mt-2 mt-sm-3 col-12 col-lg-3">Email</dt>
+                        <dd class="mt-2 mt-sm-3 col-12 col-lg-9">
+                            {% if form.name.errors %}
+                                {{ form.name(class="form-control is-invalid", autocomplete="off", placeholder="Enter name") }}
+                                <div class="invalid-feedback">
+                                    {% for error in form.name.errors %}
+                                        <span>{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                {{ form.name(class="form-control", autocomplete="off", placeholder="Enter Email") }}
+                            {% endif %}
+                        </dd>
+                        <dt class="mt-2 mt-sm-3 col-12 col-lg-3">Password</dt>
+                        <dd class="mt-2 mt-sm-3 col-12 col-lg-9">
+                            {% if form.types.errors %}
+                                {{ form.types(class="form-control is-invalid", autocomplete="off", placeholder="Enter types") }}
+                                <div class="invalid-feedback">
+                                    {% for error in form.types.errors %}
+                                        <span>{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                {{ form.types(class="form-control", autocomplete="off", placeholder="Enter types") }}
+                            {% endif %}
+                        </dd>
+                        
+                        <dt class="mt-2 mt-sm-3 col-12 col-lg-3"></dt>
+                        <dd class="mt-2 mt-sm-3 col-12 col-lg-9">
+                            {{ form.submit(class="btn btn-outline-info") }}
+                            <label for="" class="ml-3">
+                                <a href="#"><small><u>Forgot Password?</u></small></a>
+                            </label>
+                        </dd>
+                    </dl>
+                </div>
+                <div class="offset-1 offset-sm-3 border-top mb-4">
+                    <small class="text-muted">
+                        Don't Have An Account?<a href="{{ url_for('register') }}"> <u>Sign Up</u></a>
+                    </small>
+                </div>
+            </div>
+            </form>
+        </div>
+        <div class="col-12 col-sm-2">
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
