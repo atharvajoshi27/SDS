@@ -22,6 +22,7 @@ class User(db.Model, UserMixin):
     profile_picture = db.Column(db.String(50), default='image.jpg', nullable=True)
     posts = db.relationship('Post', backref='author', lazy=True)
     anniversary = db.relationship('Anniversary', backref='relative', lazy=True)
+    tasks = db.relationship('Task', backref='author', lazy=True)
 
     def __repr__(self):
         return f"User('{self.firstname}', '{self.lastname}')"
@@ -45,4 +46,13 @@ class Anniversary(db.Model):
     date = db.Column(db.Date, nullable=False)
     types = db.Column(db.String(30), nullable=False)
     note = db.Column(db.Text, nullable=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+
+
+class Task(db.Model):
+    __tablename__ = "tasks"
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(120), nullable=False)
+    note = db.Column(db.Text, nullable=False)
+    lastdate = db.Column(db.Date, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)

@@ -92,3 +92,10 @@ class AnniversaryForm(FlaskForm):
     note = TextAreaField('Note')
     submit = SubmitField('Add')
 
+
+class TaskForm(FlaskForm):
+    title = StringField('Title', validators=[DataRequired(), Length(min=1, max=120)])
+    note = TextAreaField('Note', validators=[DataRequired()])
+    lastdate = DateField('Last Date', validators=[DataRequired()], format='%Y-%m-%d')
+    submit = SubmitField('Add')
+

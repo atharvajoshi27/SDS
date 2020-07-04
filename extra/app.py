@@ -1,5 +1,5 @@
 from flask import Flask, render_template, url_for, flash, redirect, request
-from forms import Registration, Login, Update, AnniversaryForm
+from forms import Registration, Login, Update, AnniversaryForm, TaskForm
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 from flask_bcrypt import Bcrypt
@@ -11,6 +11,7 @@ from PIL import Image
 
 
 URL = "postgresql://username:password@localhost:5432/name_of_database"
+
 
 
 
@@ -161,7 +162,7 @@ def update_anniversary(itsid):
         form.name.data = anni.name
         form.date.data = anni.date
         form.types.data = anni.types
-        form.note.date = anni.types
+        form.note.data = anni.types
     return render_template("create_anniversary.html", title='Update Anniversary', form=form, legend='Update')
 
 @app.route("/anniversary/<int:itsid>/delete", methods=["POST"])
@@ -175,6 +176,61 @@ def delete_anniversary(itsid):
     db.session.commit()
     flash("Anniversary deleted!", 'success')
     return redirect(url_for('anniversary'))
+
+
+@app.route("/tasks", methods=["GET", "POST"])
+@login_required
+def tasks():
+    tasks = current_user.tasks; 
+    return render_template("tasks.html", tasks=tasks)
+
+@app.route("/tasks/new", methods=["GET", "POST"])
+def new_task():
+    form = TaskForm()
+    if form.validate_on_submit():
+        task = Task(title=form.title.data, lastdate=form.lastdate.data, note=form.note.data, author=current_user)
+        db.session.add(task)
+        db.session.commit()
+        flash("Task Added", 'success')
+        return redirect(url_for('tasks'))
+    return render_template("create_task.html", title="New Task", form=form, legend='Add')
+
+@app.route("/tasks/<int:itsid>/edit", methods=["GET", "POST"])
+@login_required
+def update_task(itsid):
+    task = Task.query.get_or_404(itsid)
+    if task.author != current_user:
+        abort(403)
+    form = TaskForm()
+    
+    if form.validate_on_submit():
+        task.title = form.title.data
+        task.lastdate = form.lastdate.data
+        task.note = form.note.data
+        db.session.commit()
+        flash("Task Updated Successfully!", 'success')
+        return redirect(url_for('tasks'))
+    elif request.method == "GET":
+        form.title.data = task.title
+        form.lastdate.data = task.lastdate
+        form.note.data = task.note
+    return render_template("create_task.html", title='Update Task', form=form, legend='Update')
+
+@app.route("/tasks/<int:itsid>/delete", methods=["POST"])
+@login_required
+def delete_task(itsid):
+    task = Task.query.get_or_404(itsid)
+    if task.author != current_user:
+        print("I don't know why I am here!")
+        abort(403)
+    db.session.delete(task)
+    db.session.commit()
+    flash("Task deleted!", 'success')
+    return redirect(url_for('tasks'))
+
+
+
+
 
 
 if __name__ == '__main__':

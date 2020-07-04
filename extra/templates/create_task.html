@@ -1,0 +1,104 @@
+{% extends "layout2.html" %}
+
+{% block title %}
+    New Task
+{% endblock %}
+{% block content %}
+
+<main role="main" class="container"">
+    <div class="row">
+        <div class="col-md-8">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">
+                    {{ message }}
+                </div>
+                {% endfor %}
+            {% endif %}
+            {% endwith %}
+ 
+        <div class="container mb-4">
+            <div class="row row-content">
+                <div class="col-12 col-md-2"></div>
+                <div class="col-12 col-md-8">
+                    <a href="{{ url_for('tasks') }}" type="button" class="btn btn-success">All Tasks</a>
+                </div>
+                <div class="col-12 col-md-2"></div>
+            </div>
+        </div> 
+        <div class="col-12 col-md-8">
+            <div class="content-section">
+            <form method="POST" action="">
+                {{ form.hidden_tag() }}
+            
+                <legend class="border-bottom mb-4">
+                 <h4>{{ legend }} Task</h4>
+                </legend>
+                <div class="form-group">
+                    {{ form.title.label(class="form-control-label") }}
+                    {% if form.title.errors %}
+                        {{ form.title(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.title.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.title(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+                
+                <div class="form-group">
+                    {{ form.note.label(class="form-control-label") }}
+
+                    {% if form.note.errors %}
+                        {{ form.note(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.note.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.note(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    {{ form.lastdate.label(class="form-control-label") }}
+                    {% if form.lastdate.errors %}
+                        {{ form.lastdate(class="form-control form-control-lg is-invalid", type="lastdate") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.lastdate.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.lastdate(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+                
+            </fieldset>
+            <div class="form-group">
+                {{ form.submit(class="btn btn-outline-info") }}
+            </div>
+            </form>
+            </div>
+        </div>
+    </div>
+        <div class="col-md-4">
+            <div class="content-section">
+                <h3>Our Sidebar</h3>
+                <p class='text-muted'>You can put any information here you'd like.
+                    <ul class="list-group">
+                    <li class="list-group-item list-group-item-light">Anniversaries</li>
+                    <li class="list-group-item list-group-item-light active">Tasks</li>
+                    <li class="list-group-item list-group-item-light">Achievements</li>
+                    <li class="list-group-item list-group-item-light">Expenses</li>
+                    </ul>
+                </p>
+            </div>
+    </div>
+</div>
+</main>
+{% endblock %}

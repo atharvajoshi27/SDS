@@ -1,7 +1,7 @@
 {% extends "layout2.html" %}
 
 {% block title %}
-    Anniversaries
+    Tasks
 {% endblock %}
 {% block content %}
 
@@ -16,7 +16,7 @@
     <div class="row row-content">
         <div class="col-12 col-md-2"></div>
         <div class="col-12 col-md-8">
-            <a href="{{ url_for('new_anniversary') }}" type="button" class="btn btn-success">Add Anniversary</a>
+            <a href="{{ url_for('new_task') }}" type="button" class="btn btn-success">Add Task</a>
         </div>
         <div class="col-12 col-md-2"></div>
     </div>
@@ -37,45 +37,44 @@
     </div>
 </div>
 
-{% for anniversary in anniversaries %}
+{% for task in tasks %}
 <div class="col-12 col-md-8">
     <div class="col-12 mt-2">
         <div class="card">
-            <h5 class="card-header bg-info text-white">{{ anniversary.types }}</h5>
+            <h5 class="card-header bg-info text-white">{{ task.types }}</h5>
             <div class="card-body">
                 <p class="h6" style="line-height: 35px;">
-                    {{ anniversary.name }} has {{ anniversary.types }} on <mark style="color: green;">{{ anniversary.date }}</mark style="color: green;">
+                    {{ task.title }} is to be completed before <mark style="color: green;">{{ task.lastdate }}</mark style="color: green;">
                 </p>
              </div>  
              <div class="container">
                 <div class="row row-content">
                     <div class="col-6">
-                        <form action="{{ url_for('update_anniversary', itsid=anniversary.id) }}">
+                        <form action="{{ url_for('update_task', itsid=task.id) }}">
                             <div class="form-group ml-5">
                                 <button class="btn btn-primary" style="width: 100px;">Edit</button>
                             </div>
                         </form>
                     </div>
                     <div class="col-6">
-<!--  -->
-                            <button type="button" class="btn btn-danger" style="width: 100px;" data-toggle="modal" data-target="#{{ anniversary.id }}">
+                            <button type="button" class="btn btn-danger" style="width: 100px;" data-toggle="modal" data-target="#{{ task.id }}">
                                 Delete
                               </button>
                               
                               <!-- Modal -->
                               <!-- Created dynamic id -->
-                              <div class="modal fade" id="{{ anniversary.id }}" tabindex="-1" role="dialog" aria-labelledby="{{ anniversary.id }}Label" aria-hidden="true">
+                              <div class="modal fade" id="{{ task.id }}" tabindex="-1" role="dialog" aria-labelledby="{{ task.id }}Label" aria-hidden="true">
                                 <div class="modal-dialog" role="document">
                                   <div class="modal-content">
                                     <div class="modal-header">
-                                      <h5 class="modal-title" id="{{ anniversary.id }}Label">Delete Anniversary?</h5>
+                                      <h5 class="modal-title" id="{{ task.id }}Label">Delete Task?</h5>
                                       <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                       </button>
                                     </div>
                                     <div class="modal-footer">
                                       <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                      <form action="{{ url_for('delete_anniversary', itsid=anniversary.id) }}" method="POST">
+                                      <form action="{{ url_for('delete_task', itsid=task.id) }}" method="POST">
                                           <input type="submit" class="btn btn-danger" value="Delete">
                                       </form>
                                     </div>
@@ -92,7 +91,7 @@
     </div>
 </div>
 {% else %}
-<h2>No anniversary today ;(</h2>
+<h2>No tasks added !</h2>
 {% endfor %}
 
 <!--  -->
@@ -102,8 +101,8 @@
       <h3>Our Sidebar</h3>
       <p class='text-muted'>You can put any information here you'd like.
         <ul class="list-group">
-          <li class="list-group-item list-group-item-light active">Anniversaries</li>
-          <li class="list-group-item list-group-item-light"><a href="{{ url_for('tasks') }}">Tasks</a></li>
+          <li class="list-group-item list-group-item-light"><a href="{{ url_for('anniversary') }}">Anniversaries</a></li>
+          <li class="list-group-item list-group-item-light active">Tasks</li>
           <li class="list-group-item list-group-item-light">Achievements</li>
           <li class="list-group-item list-group-item-light">Expenses</li>
         </ul>
@@ -115,63 +114,3 @@
 </main>
 
 {% endblock %}
-<!-- <dl>
-    <dt>
-        <div class="container">
-            <div class="row row-content">
-                <div class="col-6">
-                    <form action="">
-                        <div class="form-group ml-5">
-                            <button class="btn btn-primary" style="width: 100px;">Edit</button>
-                        </div>
-                    </form>
-                </div>
-                <div class="col-6">
-                    <form action="">
-                        <div class="form-group mr-5">
-                            <button class="btn btn-danger" style="width: 100px;">Delete</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </dd>
-</dl> -->
-
-
-<!-- 
-    This is card-body
-    <dl class="row">
-    <dt class="mt-2 mt-sm-3 col-12 col-md-6 mt-4">Date</dt>
-    <dd class="mt-2 mt-sm-3 col-12 col-md-6 mt-4">
-        {{ anniversary.date }}
-    </dd>
-    <dt class="mt-2 mt-sm-3 col-12 col-md-6 mt-4">Type</dt>
-    <dd class="mt-2 mt-sm-3 col-12 col-md-6 mt-4">
-        {{ anniversary.types }}
-    </dd>
-    <dt class="mt-2 mt-sm-3 col-12 col-md-6 mt-4">Note</dt>
-    <dd class="mt-2 mt-sm-3 col-12 col-md-6 mt-4">
-        {{ anniversary.note }}
-    </dd>
-</dl>
-<div class="container">
-    <div class="row row-content">
-        <div class="col-2"></div>
-        <div class="col-4">
-            <form action="">
-                <div class="form-group">
-                    <button class="btn btn-primary" style="width: 100px;">Edit</button>
-                </div>
-            </form>
-        </div>
-        <div class="col-4">
-            <form action="">
-                <div class="form-group">
-                    <button class="btn btn-danger" style="width: 100px;">Delete</button>
-                </div>
-            </form>
-        </div>
-        <div class="col-2"></div>
-    </div>
-</div> -->
