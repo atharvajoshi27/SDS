@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block bar %}
-<nav class="navbar navbar-dark navbar-expand-sm fixed-top">
+<nav class="navbar navbar-dark navbar-expand-sm fixed-top" style="height: 100px;">
     <div class="container">
         <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#Navbar">
                 <span class="navbar-toggler-icon"></span>
@@ -15,14 +15,14 @@
         <div class="collapse navbar-collapse" id="Navbar">
             <ul class="navbar-nav mr-auto">
                 
-                <li class="nav-item"><a class="nav-link" href="{{ url_for('home') }}"><span class="fa fa-home fa-lg">Home</span></a></li>
-                <li class="nav-item"><a class="nav-link" href="{{ url_for('about') }}"><span class="fa fa-info fa-lg">About</span></a></li>
+                <li class="nav-item h5"><a class="nav-link" href="{{ url_for('home') }}"><span class="fa fa-home fa-lg">Home</span></a></li>
+                <li class="nav-item h5"><a class="nav-link" href="{{ url_for('about') }}"><span class="fa fa-info fa-lg">About</span></a></li>
                 {% if current_user.is_authenticated %}
-                    <li class="nav-item"><a class="nav-link" href="{{ url_for('logout') }}"><span class="fa fa-list fa-lg">Log Out</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ url_for('account') }}"><span class="fa fa-address-card fa-lg">Account</span></a></li>
+                    <li class="nav-item h5"><a class="nav-link" href="{{ url_for('logout') }}"><span class="fa fa-list fa-lg">Log Out</span></a></li>
+                    <li class="nav-item h5"><a class="nav-link" href="{{ url_for('account') }}"><span class="fa fa-address-card fa-lg">Account</span></a></li>
                 {% else %}
-                    <li class="nav-item"><a class="nav-link" href="{{ url_for('login') }}"><span class="fa fa-list fa-lg">Log In</span></a></li>
-                    <li class="nav-item active"><a class="nav-link" href="{{ url_for('register') }}"><span class="fa fa-address-card fa-lg">Sign Up</span></a></li>
+                    <li class="nav-item h5"><a class="nav-link" href="{{ url_for('login') }}"><span class="fa fa-list fa-lg">Log In</span></a></li>
+                    <li class="nav-item h5 active"><a class="nav-link" href="{{ url_for('register') }}"><span class="fa fa-address-card fa-lg">Sign Up</span></a></li>
                 {% endif %}
             </ul>
         </div>
@@ -51,13 +51,13 @@
 {% endblock %}
 
 {% block body %}
-    <div class="container" style="padding: 100px;">
+    <div class="container" style="padding-top: 120px;">
         <div class="row row-content">
             <div class="col-12 col-sm-2"></div>
             <div class="col-12 col-sm-8">
                 <form action="" method="POST">
                     {{ form.hidden_tag() }}
-                <div class="card">
+                <div class="card" style="border: none;">
                     <h3 class="card-header bg-danger text-white">Join Us</h3>
                     <div class="card-body">
                         <dl class="row">
@@ -111,6 +111,19 @@
                                     </div>
                                 {% else %}
                                     {{ form.email(class="form-control", autocomplete="off", placeholder="Enter Email") }}
+                                {% endif %}
+                            </dd>
+                            <dt class="mt-2 mt-sm-3 col-12 col-lg-3">Set Key</dt>
+                            <dd class="mt-2 mt-sm-3 col-12 col-lg-9">
+                                {% if form.setkey.errors %}
+                                    {{ form.setkey(class="form-control is-invalid", autocomplete="off", placeholder="Set Key For Passwords") }}
+                                    <div class="invalid-feedback">
+                                        {% for error in form.setkey.errors %}
+                                            <span>{{ error }}</span>
+                                        {% endfor %}
+                                    </div>
+                                {% else %}
+                                    {{ form.setkey(class="form-control", autocomplete="off", placeholder="Set Key For Passwords") }}
                                 {% endif %}
                             </dd>
                             <dt class="mt-2 mt-sm-3 col-12 col-lg-3">Password</dt>

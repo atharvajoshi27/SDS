@@ -8,6 +8,10 @@ h1, h2, h3, h4, h5, h6 {
 color: #444444;
 }
 
+.body{
+background-color: #3D0814;
+}
+
 .bg-steel {
 background-color: #5f788a;
 }
@@ -77,4 +81,12 @@ margin-bottom: 16px;
 
 .account-heading {
 font-size: 2.5rem;
+}
+
+.card{
+    border: none;
+}
+
+.navbar-dark{
+    background-color: black;
 }

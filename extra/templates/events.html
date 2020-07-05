@@ -3,13 +3,19 @@
 {% block title %}
     Anniversaries
 {% endblock %}
-
-
+{% block barcontent %}
+<a class="nav-item nav-link active h5" shref="{{ url_for('events') }}">Events</a>
+<a class="nav-item nav-link h5" href="{{ url_for('anniversary') }}">Anniversaries</a>
+<a class="nav-item nav-link h5" href="{{ url_for('tasks') }}">Tasks</a>
+<a class="nav-item nav-link h5" href="{{ url_for('passwords') }}">Passwords</a>
+{% endblock %}
 {% block content %}
 
-<main role="main" class="container"">
-    <div class="row">
-    <div class="col-md-8">
+<main role="main" class="container" style="padding-top: 120px; background-color: #3D0814;">
+    
+        <!--  -->
+    <!-- <div class="col-md-8">
+
         {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
             {% for category, message in messages %}
@@ -18,63 +24,129 @@
             </div>
             {% endfor %}
         {% endif %}
-        {% endwith %}
-    
-
-
-<!--  -->
-
-{% for anniversary in anniversaries %}
-<div class="col-12 col-md-8">
-    <div class="col-12 mt-2">
-        <div class="card">
-            <h5 class="card-header bg-info text-white">{{ anniversary.types }}</h5>
-            <div class="card-body">
-                <p class="h6" style="line-height: 35px;">
-                    {{ anniversary.name }} has {{ anniversary.types }} on <mark style="color: green;">{{ anniversary.date }}</mark style="color: green;">
-                </p>
-            </div>  
-            <div class="container">
-                <div class="row row-content">
-                    <div class="col-6">
-                        <form action="">
-                            <div class="form-group ml-5">
-                                <button class="btn btn-primary" style="width: 100px;">Edit</button>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="col-6">
-                        <form action="">
-                            <div class="form-group mr-5">
-                                <button class="btn btn-danger" style="width: 100px;">Delete</button>
-                            </div>
-                        </form>
-                    </div>
+        {% endwith %} -->
+    <div class="row row-content">
+        <div class="col-12 col-md-3"></div>
+        <div class="col-12 col-md-6">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">
+                    {{ message }}
                 </div>
-            </div> 
+                {% endfor %}
+            {% endif %}
+            {% endwith %}
         </div>
-        </form>
+        <div class="col-12 col-md-3"></div>
+    </div>
+    <div class="row row-content">
+        <div class="col-12 col-md-3"></div>
+        <div class="col-12 col-md-6 mb-4" style=" background-color: black; border-radius: 15px; padding-top: 10px; padding-bottom: 10px;">
+           <!-- 432818 -->
+            {% if not anniversaries %}
+            {% if not tasks %}
+            <p class="h2"> No Anniversaries and Tasks today!</p>
+            {% endif %}
+            <p class="h2"> No anniversaries today!</p>
+            {% else %}
+           <p class="h2 text-white" style="background-color: black; height: 60px; text-align: center; line-height: 35px;">Don't forget to wish them today!</p>
+            {% endif %}
+        </div>
+        <div class="col-12 col-md-3"></div>
+    </div>
+    <div class="row">
+        {% for anniversary in anniversaries %}
+            <div class="col-12 col-md-6">
+                <div class="col-12 mt-2">
+                    <div class="card" style="border: none;">
+                        <h4 class="card-header text-white bg-danger">{{ anniversary.types }}</h4>
+                        <!--  style="background-color: #310D0C; -->
+                        <div class="card-body " style="background-color:white;">
+                            <!-- #650D1B -->
+                            <div>
+                            <p class="h5" style="line-height: 35px;">
+                                {{ anniversary.name }} has {{ anniversary.types }} on <mark style="color: green;">{{ anniversary.date }}</mark style="color: green;">
+                             </p>
+                             {% if anniversary.note %}
+                             <p class="h5">
+                             <b>Note :</b>
+                                {{ anniversary.note }}
+                             </p>
+                             {% endif %}
+                            </div>
+                            <div class="row row-content">
+                                <div class="col-12 col-md-3"></div>
+                                <div class="col-6 col-md-3">
+                                <form action=""><input type="submit" name="" id="" value="Edit" class="btn btn-primary" style="width: 75px;"></form>
+                                </div>
+                                <div class="col-6 col-md-3">
+                                <form action=""><input type="submit" name="" id="" value="Delete" class="btn btn-danger" style="width: 75px;"></form>
+                                </div>
+                                <div class="col-12 col-md-3"></div>
+                            </div>
+                             
+                         </div>  
+            
+        </div>
+       
+    </div>
+</div>
+{% endfor %}
+<!-- </td> -->
+<!-- anniversary end -->
+<!-- <td class="col-6"> -->
+
+</div>
+<div class="row row-content mt-5">
+    <div class="col-12 col-md-3"></div>
+    <div class="col-12 col-md-6 mb-4" style=" background-color:#432818; border-radius: 15px; padding-top: 10px; padding-bottom: 10px;">
+        {% if not tasks  %}
+            {% if anniversaries %}
+            <p class="h2"> No Tasks today!</p>
+            {% endif %}
+        {% else %}
+       <p class="h2 text-white" style="background-color:#432818; height: 60px; text-align: center; line-height: 35px;">Don't wait! Complete them today!</p>
+        {% endif %}
+    </div>
+    <div class="col-12 col-md-3"></div>
+</div>
+<div class="row row-content">
+{% for task in tasks %}
+<div class="col-12 col-md-6 mt-3 mb-4">
+    <div class="col-12 mt-2">
+        <div class="card" style="border: none;">
+            <h5 class="card-header text-white"   style="background-color: #310D0C;">{{ task.title }}</h5>
+            <div class="card-body" style="background-color: #650D1B;">
+                <p class="h6" style="line-height: 35px;">
+                    <mark style="color: green;">{{ task.title }}</mark> has to be completed by today!
+                </p>
+                <div class="row row-content">
+                    <div class="col-12 col-md-3"></div>
+                    <div class="col-6 col-md-3">
+                    <form action=""><input type="submit" name="" id="" value="Edit" class="btn btn-primary" style="width: 75px;"></form>
+                    </div>
+                    <div class="col-6 col-md-3">
+                    <form action=""><input type="submit" name="" id="" value="Delete" class="btn btn-danger" style="width: 75px;"></form>
+                    </div>
+                    <div class="col-12 col-md-3"></div>
+                </div>
+            </div>  
+             
+        </div>
     </div>
 </div>
 {% else %}
-<h2>No anniversary today ;(</h2>
+<h2>No Task today ;(</h2>
 {% endfor %}
+<!-- </td>
+</tr>
+</table> -->
+
 
 <!--  -->
 </div>
-<div class="col-md-4">
-    <div class="content-section">
-    <h3>Saved Info</h3>
-    <p class='text-muted'>You can put any information here you'd like.
-        <ul class="list-group">
-        <li class="list-group-item list-group-item-light"><a href="{{ url_for('anniversary') }}">Anniversaries</a></li>
-        <li class="list-group-item list-group-item-light"><a href="{{ url_for('tasks') }}">Tasks</a></li>
-        <li class="list-group-item list-group-item-light">Achievements</li>
-        <li class="list-group-item list-group-item-light">Expenses</li>
-        </ul>
-    </p>
-    </div>
-</div>
+
 </div>
 </main>
 {% endblock %}

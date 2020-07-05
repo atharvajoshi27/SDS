@@ -7,6 +7,9 @@ from models import User
 from flask_login import current_user
 from flask_wtf.file import FileField, FileAllowed
 from datetime import datetime
+from flask_bcrypt import Bcrypt
+
+bcrypt = Bcrypt()
 
 class Registration(FlaskForm):
     firstname = StringField('First Name', validators=[DataRequired(), Length(min=1, max=30)])
@@ -19,6 +22,8 @@ class Registration(FlaskForm):
     email = EmailField('Email', [validators.DataRequired(), validators.Email()])
 
     password = PasswordField('Password', validators=[DataRequired()])
+
+    setkey = PasswordField('Set Key', validators=[DataRequired()])
 
     confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password', message='Password must match')])
 
@@ -67,7 +72,7 @@ class Update(FlaskForm):
 
     email = EmailField('Email', [validators.DataRequired(), validators.Email()])
 
-    profile =   FileField('Profile Picture', validators=[FileAllowed(['jpg', 'png'])]) 
+    profile =   FileField('Profile Picture', validators=[FileAllowed(['jpg', 'png', 'jpeg'])]) 
 
     submit = SubmitField('Update')
 
@@ -98,4 +103,29 @@ class TaskForm(FlaskForm):
     note = TextAreaField('Note', validators=[DataRequired()])
     lastdate = DateField('Last Date', validators=[DataRequired()], format='%Y-%m-%d')
     submit = SubmitField('Add')
+
+
+class PasswordForm(FlaskForm):
+    # email = EmailField('Email', validators[DataRequired(), Email])
+    site = TextAreaField('Site', [validators.DataRequired()])
+
+    password = PasswordField('Password', validators=[DataRequired()])
+
+    hint = StringField('Hint')
+
+    submit = SubmitField('Add')
+
+    # def validate_yourpassword(self, yourpassword):
+    #    if not bcrypt.check_password_hash(current_user.password, yourpassword.data):
+    #        raise ValidationError("Please enter correct password!")
+
+
+class CheckPassword(FlaskForm):
+    password = PasswordField('Your password!', validators=[DataRequired()])
+    submit = SubmitField('Check')
+    def validate_password(self, password):
+        if not bcrypt.check_password_hash(current_user.password, password.data):
+            raise ValidationError("Please enter correct password!")
+
+
 

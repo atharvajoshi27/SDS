@@ -19,10 +19,12 @@ class User(db.Model, UserMixin):
     username = db.Column(db.String(40), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(60), unique=False, nullable=False)
+    setkey = db.Column(db.Text, default='ryuzaki', unique=False, nullable=False)
     profile_picture = db.Column(db.String(50), default='image.jpg', nullable=True)
     posts = db.relationship('Post', backref='author', lazy=True)
     anniversary = db.relationship('Anniversary', backref='relative', lazy=True)
     tasks = db.relationship('Task', backref='author', lazy=True)
+    passwords = db.relationship('Password', backref='user', lazy=True)
 
     def __repr__(self):
         return f"User('{self.firstname}', '{self.lastname}')"
@@ -55,4 +57,12 @@ class Task(db.Model):
     title = db.Column(db.String(120), nullable=False)
     note = db.Column(db.Text, nullable=False)
     lastdate = db.Column(db.Date, nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+
+class Password(db.Model):
+    __tablename__ = "passwords"
+    id = db.Column(db.Integer, primary_key=True)
+    site = db.Column(db.Text, nullable=False)
+    password = db.Column(db.Text, nullable=False)
+    hint = db.Column(db.String(60), nullable=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)

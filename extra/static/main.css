@@ -21,3 +21,11 @@
     /* background-color: #512DA8; */
     background-color: black;
 }
+
+.fixed{
+    z-index: 99;
+}
+
+.card{
+    border: none;
+}

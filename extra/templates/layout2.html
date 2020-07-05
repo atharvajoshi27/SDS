@@ -17,10 +17,16 @@
     {% else %}
         <title>SDS Task</title>
     {% endif %}
+    <style>
+      .navbar-dark{
+        background-color: black;
+      }
+    </style>
 </head>
-<body>
+
+<body style="background-color: #3D0814;">
     <header class="site-header">
-        <nav class="navbar navbar-expand-md navbar-dark fixed-top">
+        <nav class="navbar navbar-expand-md navbar-dark fixed-top" style="height: 100px;;">
           <div class="container">
             
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
@@ -28,16 +34,18 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarToggle">
               <div class="navbar-nav mr-auto">
-                <a class="nav-item nav-link" href="{{ url_for('home') }}">Home</a>
+                <a class="nav-item nav-link h5" href="{{ url_for('home') }}">Home</a>
                 
                 {% if current_user.is_authenticated %}
-                <a class="nav-item nav-link" href="{{ url_for('events') }}">Events</a>
-                  <a class="nav-item nav-link" href="{{ url_for('logout') }}">Log Out</a>
-                  <a class="nav-item nav-link" href="{{ url_for('account') }}">Account</a>
+                {% block barcontent %}
+                
+                {% endblock %}
+                  <a class="nav-item nav-link h5" href="{{ url_for('logout') }}">Log Out</a>
+                  <a class="nav-item nav-link h5" href="{{ url_for('account') }}">Account</a>
                 {% else %}
-                <a class="nav-item nav-link" href="{{ url_for('about') }}">About</a>
-                  <a class="nav-item nav-link" href="{{ url_for('login') }}">Log In</a>
-                  <a class="nav-item nav-link" href="{{ url_for('register') }}">Register</a>
+                <a class="nav-item nav-link h5" href="{{ url_for('about') }}">About</a>
+                  <a class="nav-item nav-link h5" href="{{ url_for('login') }}">Log In</a>
+                  <a class="nav-item nav-link h5" href="{{ url_for('register') }}">Register</a>
                 {% endif %}
               </div>
               <!-- Navbar Right Side -->

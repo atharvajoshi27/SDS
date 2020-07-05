@@ -1,6 +1,7 @@
 from flask import Flask, render_template, url_for, flash, redirect, request
-from forms import Registration, Login, Update, AnniversaryForm, TaskForm
+from forms import Registration, Login, Update, AnniversaryForm, TaskForm, PasswordForm, CheckPassword
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import and_, extract
 from datetime import datetime
 from flask_bcrypt import Bcrypt
 from models import *
@@ -8,11 +9,12 @@ from flask_login import login_user, current_user, logout_user, login_required
 import secrets
 import os
 from PIL import Image
+from simplecrypt import encrypt, decrypt
+from cryptography.fernet import Fernet
 
-
-URL = "postgresql://username:password@localhost:5432/name_of_database"
-
-
+URL = "server://username:password@localhost:port/name_of_database"
+key = b'-ko3jzYj8kzzHnn6epl_hrR9eS-6oag2UVn8QxwrZk8='
+CIPHER = Fernet(key)
 
 
 app = Flask(__name__)
@@ -38,7 +40,22 @@ def about():
 
 @app.route("/events")
 def events():
-    return render_template("events.html", title='Events')
+    current_time = datetime.now()
+    month = current_time.month
+    day = current_time.day
+    # if day < 10:
+    #     day = "0" + str(day)
+    # if month < 10:
+    #     month = "0" + str(month)
+    # day = str(day)
+    # month = str(month)
+    today = datetime.today().strftime('%Y-%m-%d')
+    anniversaries = Anniversary.query.filter(and_((extract('month', Anniversary.date) == month), (extract('day', Anniversary.date) == day)))
+    tasks = Task.query.filter_by(lastdate = today)
+    
+    # anniversaries = Anniversary.query.filter(_and((extract('month', Anniversary.date) == month), extract('day' == day)))
+    # anniversaries =  Anniversary.query.filter(Anniversary.date.like(f'%{month}'+'-'+f'{day}')).all()
+    return render_template("events.html", title='Events', anniversaries=anniversaries, tasks=tasks)
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
@@ -47,7 +64,8 @@ def register():
     if form.validate_on_submit():
         print("\n\nForm validated!\n\n")
         hashed = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
-        user = User(firstname=form.firstname.data, lastname=form.lastname.data, username=form.username.data, email=form.email.data, password=hashed)
+        
+        user = User(firstname=form.firstname.data, lastname=form.lastname.data, username=form.username.data, email=form.email.data, password=hashed, setkey=form.setkey.data)
         db.session.add(user)
         db.session.commit()
         flash(f"Congratulations! Your account has been created successfully!", 'success')
@@ -77,7 +95,7 @@ def login():
                 return redirect(url_for(next_page))
             else:
                 flash(f"Login Successful!", 'success')
-                return redirect(url_for('home'))
+                return redirect(url_for('events'))
         else:
             flash(f"Login unsuccessful! Please check email and password again!", 'danger')
     return render_template("Login.html", title='Login', form=form)
@@ -85,6 +103,7 @@ def login():
 @app.route("/logout")
 def logout():
     logout_user()
+    flash('You have been logged out!', 'success')
     return redirect(url_for('home'))
 
 def save_image(profile):
@@ -132,6 +151,7 @@ def anniversary():
     return render_template("anniversary.html", anniversaries=anniversaries)
 
 @app.route("/anniversary/new", methods=["GET", "POST"])
+@login_required
 def new_anniversary():
     form = AnniversaryForm()
     if form.validate_on_submit():
@@ -185,6 +205,7 @@ def tasks():
     return render_template("tasks.html", tasks=tasks)
 
 @app.route("/tasks/new", methods=["GET", "POST"])
+@login_required
 def new_task():
     form = TaskForm()
     if form.validate_on_submit():
@@ -229,6 +250,87 @@ def delete_task(itsid):
     return redirect(url_for('tasks'))
 
 
+# Start of Passwords
+@app.route("/passwords", methods=["GET", "POST"])
+@login_required
+def passwords():
+    passwords = current_user.passwords; 
+    return render_template("password.html", passwords=passwords)
+
+@app.route("/passwords/new", methods=["GET", "POST"])
+@login_required
+def new_password():
+    form = PasswordForm()
+    if form.validate_on_submit():
+        message = form.password.data # Users real password
+
+        message = message.encode('latin-1') # processed
+
+        encrypted_text = CIPHER.encrypt(message) # Got the value
+        encrypted_text = encrypted_text.decode()
+        # original_text = CIPHER.decrypt(encrypted_text)
+        # print(original_text.decode())
+        # encrypted_p = encrypt(MYKEY, form.password.data).decode('latin-1')
+        password = Password(site=form.site.data, password=encrypted_text, hint=form.hint.data, user=current_user)
+        db.session.add(password)
+        db.session.commit()
+        flash("Password Added", 'success')
+        return redirect(url_for('passwords'))
+    return render_template("create_passwords.html", title="New Password", form=form, legend='Add')
+
+@app.route("/passwords/<int:itsid>/edit", methods=["GET", "POST"])
+@login_required
+def update_password(itsid):
+    password_details = Password.query.get_or_404(itsid)
+    if password_details.user != current_user:
+        abort(403)
+
+    form = PasswordForm()
+    
+    if form.validate_on_submit():
+        message = form.password.data # Users real password
+        message = message.encode('latin-1') # processed
+        encrypted_text = CIPHER.encrypt(message) # Got the value
+        encrypted_text = encrypted_text.decode()
+        password_details.site = form.site.data
+        password_details.password = encrypted_text
+        password_details.hint = form.hint.data
+        db.session.commit()
+        flash("Password Updated Successfully!", 'success')
+        return redirect(url_for('passwords'))
+
+    elif request.method == "GET":
+        form.site.data = password_details.site
+        form.hint.data = password_details.hint
+    return render_template("create_passwords.html", title='Update Password', form=form, legend='Update')
+
+@app.route("/passwords/<int:itsid>/delete", methods=["POST"])
+@login_required
+def delete_password(itsid):
+    password_details = Password.query.get_or_404(itsid)
+    if password_details.user != current_user:
+        print("I don't know why I am here!")
+        abort(403)
+    db.session.delete(password_details)
+    db.session.commit()
+    flash("Password deleted!", 'success')
+    return redirect(url_for('passwords'))
+
+
+@app.route("/passwords/viewpassword/<int:itsid>", methods=["GET", "POST"])
+def viewpassword(itsid):
+    form = CheckPassword()
+    if form.validate_on_submit():
+        password_details = Password.query.get_or_404(itsid)
+        # original_text = CIPHER.decrypt(encrypted_text)
+        # print(original_text.decode())
+        encrypted_text = password_details.password
+        encrypted_text = encrypted_text.encode()
+        original_text = CIPHER.decrypt(encrypted_text).decode()
+        # final_password = original_text.decode()
+        actual_password = Password(site=password_details.site, password=original_text, user_id=current_user.id)
+        return render_template("show_password.html", actual_password=actual_password)
+    return render_template("viewpassword.html", form=form, actual_password=False)
 
 
 

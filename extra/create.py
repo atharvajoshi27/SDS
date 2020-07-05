@@ -6,7 +6,6 @@ from sqlalchemy_utils import database_exists, create_database
 
 URL = "server://username:password@localhost:port/name_of_database"
 
-
 engine = create_engine(URL)
 
 if not database_exists(engine.url):

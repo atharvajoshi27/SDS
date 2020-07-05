@@ -5,7 +5,7 @@ Home
 {% endblock %}
 
 {% block bar %}
-<nav class="navbar navbar-dark navbar-expand-sm fixed-top">
+<nav class="navbar navbar-dark navbar-expand-sm fixed-top" style="height: 100px">
     <div class="container">
         <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#Navbar">
                 <span class="navbar-toggler-icon"></span>
@@ -15,15 +15,18 @@ Home
         <div class="collapse navbar-collapse" id="Navbar">
             <ul class="navbar-nav mr-auto">
                 
-                <li class="nav-item active"><a class="nav-link" href="{{ url_for('home') }}"><span class="fa fa-home fa-lg">Home</span></a></li>
+                <li class="nav-item h5 active"><a class="nav-link" href="{{ url_for('home') }}"><span class="fa fa-home fa-lg">Home</span></a></li>
                 {% if current_user.is_authenticated %}
-                    <li class="nav-item"><a class="nav-link" href="{{ url_for('events') }}"><span class="fa fa-info fa-lg">Events</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ url_for('logout') }}"><span class="fa fa-list fa-lg">Log Out</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ url_for('account') }}"><span class="fa fa-address-card fa-lg">Account</span></a></li>
+                    <li class="nav-item h5"><a class="nav-link" href="{{ url_for('events') }}"><span class="fa fa-info fa-lg">Events</span></a></li>
+                    <a class="nav-item nav-link h5" href="{{ url_for('anniversary') }}">Anniversaries</a>
+                    <a class="nav-item nav-link h5" href="{{ url_for('tasks') }}">Tasks</a>
+                    <a class="nav-item nav-link h5" href="{{ url_for('passwords') }}">Passwords</a>
+                    <li class="nav-item h5"><a class="nav-link" href="{{ url_for('logout') }}"><span class="fa fa-list fa-lg">Log Out</span></a></li>
+                    <li class="nav-item h5"><a class="nav-link" href="{{ url_for('account') }}"><span class="fa fa-address-card fa-lg">Account</span></a></li>
                 {% else %}
-                <li class="nav-item"><a class="nav-link" href="{{ url_for('about') }}"><span class="fa fa-info fa-lg">About</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ url_for('login') }}"><span class="fa fa-list fa-lg">Log In</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ url_for('register') }}"><span class="fa fa-address-card fa-lg">Sign Up</span></a></li>
+                <li class="nav-item h5"><a class="nav-link" href="{{ url_for('about') }}"><span class="fa fa-info fa-lg">About</span></a></li>
+                    <li class="nav-item h5"><a class="nav-link" href="{{ url_for('login') }}"><span class="fa fa-list fa-lg">Log In</span></a></li>
+                    <li class="nav-item h5"><a class="nav-link" href="{{ url_for('register') }}"><span class="fa fa-address-card fa-lg">Sign Up</span></a></li>
                 {% endif %}
             </ul>
         </div>
@@ -32,25 +35,28 @@ Home
 {% endblock %}
 
 {% block body %}
-    {% if current_user.is_authenticated %}
-    {% with messages = get_flashed_messages(with_categories=true) %}
+<div class="container" style="padding-top:120px">
+{% with messages = get_flashed_messages(with_categories=true) %}
     
-    <div class="container" style="padding-top: 80px;">
-        <div class="row row-content">
-            <div class="col-12 col-sm-2"></div>
-            <div class="col-12 col-sm-8">
-                {% if messages %}
-                {% for category, message in messages %}
-                    <div class="alert alert-{{ category }}">
-                    {{ message }}
-                    </div>
-                {% endfor %}
-                {% endif %}
-            </div>
-            <div class="col-12 col-sm-2"></div>
+<div class="container" style="padding-top: 80px;">
+    <div class="row row-content">
+        <div class="col-12 col-sm-2"></div>
+        <div class="col-12 col-sm-8">
+            {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">
+                {{ message }}
+                </div>
+            {% endfor %}
+            {% endif %}
         </div>
+        <div class="col-12 col-sm-2"></div>
     </div>
-    {% endwith %}
+</div>
+{% endwith %}
+
+    {% if current_user.is_authenticated %}
+    
 
     {% else %}
     <h1 style="color: red; padding-top: 120px;">

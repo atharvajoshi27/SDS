@@ -3,10 +3,22 @@
 {% block title %}
     Anniversaries
 {% endblock %}
-{% block content %}
 
-<main role="main" class="container"">
+
+{% block barcontent %}
+<a class="nav-item nav-link h5" href="{{ url_for('events') }}">Events</a>
+<a class="nav-item nav-link h5 active" href="{{ url_for('anniversary') }}">Anniversaries</a>
+<a class="nav-item nav-link h5" href="{{ url_for('tasks') }}">Tasks</a>
+<a class="nav-item nav-link h5" href="{{ url_for('passwords') }}">Passwords</a>
+{% endblock %}
+
+{% block content %}
+<main role="main" class="container" style="padding-top: 120px;">
     <div class="row">
+
+        
+
+          <div class="col-md-6"></div>
       <div class="col-md-8">
 <!--  -->
 
@@ -39,9 +51,9 @@
 
 {% for anniversary in anniversaries %}
 <div class="col-12 col-md-8">
-    <div class="col-12 mt-2">
-        <div class="card">
-            <h5 class="card-header bg-info text-white">{{ anniversary.types }}</h5>
+    <div class="col-12 mt-3">
+        <div class="card" style="border: none;">
+            <h5 class="card-header bg-danger text-white">{{ anniversary.types }}</h5>
             <div class="card-body">
                 <p class="h6" style="line-height: 35px;">
                     {{ anniversary.name }} has {{ anniversary.types }} on <mark style="color: green;">{{ anniversary.date }}</mark style="color: green;">
@@ -96,18 +108,18 @@
 {% endfor %}
 
 <!--  -->
+
 </div>
-<div class="col-md-4">
-    <div class="content-section">
+<div class="col-md-4 d-none d-md-block" >
+    <div class="content-section"  style="z-index: 1; position: fixed;">
       <h3>Our Sidebar</h3>
       <p class='text-muted'>You can put any information here you'd like.
         <ul class="list-group">
-          <li class="list-group-item list-group-item-light active">Anniversaries</li>
-          <li class="list-group-item list-group-item-light"><a href="{{ url_for('tasks') }}">Tasks</a></li>
-          <li class="list-group-item list-group-item-light">Achievements</li>
-          <li class="list-group-item list-group-item-light">Expenses</li>
+            <a type="button" class="list-group-item list-group-item-light btn btn-primary" style="color: black;" href="{{ url_for('new_anniversary') }}">Add Anniversary</a>
+            <a type="button" class="list-group-item list-group-item-light btn btn-primary" style="color: black;" href="{{ url_for('new_task') }}">Add Task</a>
+            <a type="button" class="list-group-item list-group-item-light btn btn-primary" style="color: black;" href="{{ url_for('new_password') }}">Add Password</a>
         </ul>
-      </p>
+    </p>
     </div>
   </div>
 </div>
@@ -115,63 +127,3 @@
 </main>
 
 {% endblock %}
-<!-- <dl>
-    <dt>
-        <div class="container">
-            <div class="row row-content">
-                <div class="col-6">
-                    <form action="">
-                        <div class="form-group ml-5">
-                            <button class="btn btn-primary" style="width: 100px;">Edit</button>
-                        </div>
-                    </form>
-                </div>
-                <div class="col-6">
-                    <form action="">
-                        <div class="form-group mr-5">
-                            <button class="btn btn-danger" style="width: 100px;">Delete</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </dd>
-</dl> -->
-
-
-<!-- 
-    This is card-body
-    <dl class="row">
-    <dt class="mt-2 mt-sm-3 col-12 col-md-6 mt-4">Date</dt>
-    <dd class="mt-2 mt-sm-3 col-12 col-md-6 mt-4">
-        {{ anniversary.date }}
-    </dd>
-    <dt class="mt-2 mt-sm-3 col-12 col-md-6 mt-4">Type</dt>
-    <dd class="mt-2 mt-sm-3 col-12 col-md-6 mt-4">
-        {{ anniversary.types }}
-    </dd>
-    <dt class="mt-2 mt-sm-3 col-12 col-md-6 mt-4">Note</dt>
-    <dd class="mt-2 mt-sm-3 col-12 col-md-6 mt-4">
-        {{ anniversary.note }}
-    </dd>
-</dl>
-<div class="container">
-    <div class="row row-content">
-        <div class="col-2"></div>
-        <div class="col-4">
-            <form action="">
-                <div class="form-group">
-                    <button class="btn btn-primary" style="width: 100px;">Edit</button>
-                </div>
-            </form>
-        </div>
-        <div class="col-4">
-            <form action="">
-                <div class="form-group">
-                    <button class="btn btn-danger" style="width: 100px;">Delete</button>
-                </div>
-            </form>
-        </div>
-        <div class="col-2"></div>
-    </div>
-</div> -->
