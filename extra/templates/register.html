@@ -113,19 +113,6 @@
                                     {{ form.email(class="form-control", autocomplete="off", placeholder="Enter Email") }}
                                 {% endif %}
                             </dd>
-                            <dt class="mt-2 mt-sm-3 col-12 col-lg-3">Set Key</dt>
-                            <dd class="mt-2 mt-sm-3 col-12 col-lg-9">
-                                {% if form.setkey.errors %}
-                                    {{ form.setkey(class="form-control is-invalid", autocomplete="off", placeholder="Set Key For Passwords") }}
-                                    <div class="invalid-feedback">
-                                        {% for error in form.setkey.errors %}
-                                            <span>{{ error }}</span>
-                                        {% endfor %}
-                                    </div>
-                                {% else %}
-                                    {{ form.setkey(class="form-control", autocomplete="off", placeholder="Set Key For Passwords") }}
-                                {% endif %}
-                            </dd>
                             <dt class="mt-2 mt-sm-3 col-12 col-lg-3">Password</dt>
                             <dd class="mt-2 mt-sm-3 col-12 col-lg-9">
                                 {% if form.password.errors %}

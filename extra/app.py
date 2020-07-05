@@ -13,6 +13,7 @@ from simplecrypt import encrypt, decrypt
 from cryptography.fernet import Fernet
 
 URL = "server://username:password@localhost:port/name_of_database"
+
 key = b'-ko3jzYj8kzzHnn6epl_hrR9eS-6oag2UVn8QxwrZk8='
 CIPHER = Fernet(key)
 
@@ -50,8 +51,15 @@ def events():
     # day = str(day)
     # month = str(month)
     today = datetime.today().strftime('%Y-%m-%d')
-    anniversaries = Anniversary.query.filter(and_((extract('month', Anniversary.date) == month), (extract('day', Anniversary.date) == day)))
-    tasks = Task.query.filter_by(lastdate = today)
+    anniversaries = Anniversary.query.filter(and_((extract('month', Anniversary.date) == month), (extract('day', Anniversary.date) == day), (Anniversary.user_id == current_user.id)))
+    tasks = Task.query.filter(and_((Task.lastdate == today), (Task.user_id == current_user.id)))
+    
+    if anniversaries.count() == 0:
+        print("came here")
+        anniversaries = []
+    if tasks.count() == 0:
+        print("came here 2")
+        tasks = []
     
     # anniversaries = Anniversary.query.filter(_and((extract('month', Anniversary.date) == month), extract('day' == day)))
     # anniversaries =  Anniversary.query.filter(Anniversary.date.like(f'%{month}'+'-'+f'{day}')).all()
@@ -65,7 +73,7 @@ def register():
         print("\n\nForm validated!\n\n")
         hashed = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
         
-        user = User(firstname=form.firstname.data, lastname=form.lastname.data, username=form.username.data, email=form.email.data, password=hashed, setkey=form.setkey.data)
+        user = User(firstname=form.firstname.data, lastname=form.lastname.data, username=form.username.data, email=form.email.data, password=hashed)
         db.session.add(user)
         db.session.commit()
         flash(f"Congratulations! Your account has been created successfully!", 'success')
