@@ -12,7 +12,7 @@ from PIL import Image
 from simplecrypt import encrypt, decrypt
 from cryptography.fernet import Fernet
 
-URL = "postgresql://username:password@localhost:5432/nameofdatabase"
+URL = "postgresql://username:password@localhost:5432/name_of_database"
 
 key = b'-ko3jzYj8kzzHnn6epl_hrR9eS-6oag2UVn8QxwrZk8='
 CIPHER = Fernet(key)

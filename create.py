@@ -4,7 +4,7 @@ from sqlalchemy import create_engine
 from sqlalchemy_utils import database_exists, create_database
 
 
-URL = "server://username:password@localhost:port/name_of_database"
+URL = "postgresql://username:password@localhost:5432/name_of_database"
 
 
 engine = create_engine(URL)

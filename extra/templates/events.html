@@ -16,12 +16,12 @@
 {% block content %}
 
 <div class="container" style="padding-top: 120px;">
-    <div class="row">
+    <div class="row justify-content-center">
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
                 {% for category, message in messages %}
                 <div class="col-12 col-md-8">
-                    <div class="alert alert-{{ category }}">
+                    <div class="alert alert-{{ category }}" style="text-align: center;">
                         {{ message }}
                     </div>
                 </div>
@@ -32,13 +32,13 @@
     <div class="row justify-content-center">
         {% if anniversaries %}
             <ul class="col-12 col-md-6" style="list-style-type: none;">
-                <header class="h2 text-white mb-3" style="text-align: center; background-color: #50202b; border-radius: 20px 20px 20px 20px; height: 50px; "> Anniversaries for today!</header>
+                <header class="h2 text-white mb-5" style="text-align: center; background-color: #50202b; border-radius: 20px 20px 20px 20px; height: 50px; line-height: 35px;">Today's Anniversaries!</header>
 
                 {% for anniversary in anniversaries %}
                     <li class="mt-2">
                             <div class="card" style="border:none; border-radius: 20px 20px 20px 20px;">
-                                <div class="card-header bg-danger text-white" style="border-radius: 20px 20px 0px 0px;">{{ anniversary.types }}</div>
-                                <div class="card-body">
+                                <div class="h5 card-header bg-danger text-white" style="border-radius: 20px 20px 0px 0px;">{{ anniversary.types }}</div>
+                                <div class="h6 card-body">
                                     <div class="row justify-content-center">
                                         <div class="col-12 mt-1">
                                             {{ anniversary.name }} has {{ anniversary.types }} today!
@@ -85,12 +85,12 @@
         {% endif %}
         {% if tasks %}
             <ul class="col-12 col-md-6" style="list-style-type: none;">
-                <header class="h2 text-white mb-3" style="text-align: center; background-color: #50202b; border-radius: 20px 20px 20px 20px; height: 50px; ">Tasks for today!</header>
+                <header class="h2 text-white mb-5" style="text-align: center; background-color: #50202b; border-radius: 20px 20px 20px 20px; height: 50px; line-height: 35px;">Tasks for today!</header>
                 {% for task in tasks %}
                     <li class="mt-2">
                         <div class="card" style="border:none; border-radius: 20px 20px 20px 20px;">
-                            <div class="card-header bg-danger text-white" style="border-radius: 20px 20px 0px 0px;">{{ task.title }}</div>
-                            <div class="card-body">
+                            <div class="h5 card-header bg-danger text-white" style="border-radius: 20px 20px 0px 0px;">{{ task.title }}</div>
+                            <div class="h6 card-body">
                                 <div class="row justify-content-center">
                                     <div class="col-12 mt-1">
                                         {{ task.title }} must be completed by today!

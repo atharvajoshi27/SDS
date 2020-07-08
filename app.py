@@ -10,7 +10,6 @@ from flask_login import login_user, current_user, logout_user, login_required
 
 URL = "postgresql://username:password@localhost:5432/name_of_database"
 
-
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '29f625651624cb373965b968e5a33ccb'
 app.config["SQLALCHEMY_DATABASE_URI"] = URL
