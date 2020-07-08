@@ -8,7 +8,7 @@ from flask_login import login_user, current_user, logout_user, login_required
 
 
 
-URL = "postgresql://postgres:username@localhost:5432/name_of_database"
+URL = "postgresql://username:password@localhost:5432/name_of_database"
 
 
 app = Flask(__name__)
