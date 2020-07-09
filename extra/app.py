@@ -94,13 +94,12 @@ def login():
         # page and then if I looged in then I should be directed to 
         # account route and not home route so
         # to redirect user 
+
             next_page = request.args.get('next')
             print(type(next_page))
             if next_page:
-                if next_page[0] == "/":
-                    next_page = next_page[1:]
                 flash(f"Login Successful!", 'success')
-                return redirect(url_for(next_page))
+                return redirect(next_page)
             else:
                 flash(f"Login Successful!", 'success')
                 return redirect(url_for('events'))
@@ -119,7 +118,7 @@ def save_image(profile):
     fileName, fileExtension = os.path.splitext(profile.filename)
     image_filename = random_name +  fileExtension
     image_path = os.path.join(app.root_path, 'static/Profile', image_filename)
-    image_size = (125, 125)
+    image_size = (960, 768)
     
     i = Image.open(profile)
     i.thumbnail(image_size)
@@ -147,7 +146,7 @@ def account():
         form.username.data = current_user.username
         form.email.data = current_user.email
     image = url_for('static', filename='Profile/'+current_user.profile_picture)
-    return render_template("account.html", title=account, form=form, image=image)
+    return render_template("account.html", title='Account', form=form, image=image)
 
 
 
@@ -156,7 +155,7 @@ def account():
 def anniversary():
     anniversaries = current_user.anniversary;
     
-    return render_template("anniversary.html", anniversaries=anniversaries)
+    return render_template("anniversary.html", anniversaries=anniversaries, title="Anniversary")
 
 @app.route("/anniversary/new", methods=["GET", "POST"])
 @login_required
@@ -210,7 +209,7 @@ def delete_anniversary(itsid):
 @login_required
 def tasks():
     tasks = current_user.tasks; 
-    return render_template("tasks.html", tasks=tasks)
+    return render_template("tasks.html", tasks=tasks, title="Tasks")
 
 @app.route("/tasks/new", methods=["GET", "POST"])
 @login_required
@@ -263,7 +262,7 @@ def delete_task(itsid):
 @login_required
 def passwords():
     passwords = current_user.passwords; 
-    return render_template("password.html", passwords=passwords)
+    return render_template("password.html", passwords=passwords, title="Passwords")
 
 @app.route("/passwords/new", methods=["GET", "POST"])
 @login_required
@@ -337,56 +336,11 @@ def viewpassword(itsid):
         original_text = CIPHER.decrypt(encrypted_text).decode()
         # final_password = original_text.decode()
         actual_password = Password(site=password_details.site, password=original_text, user_id=current_user.id)
-        return render_template("show_password.html", actual_password=actual_password)
-    return render_template("viewpassword.html", form=form, actual_password=False)
+        return render_template("show_password.html", actual_password=actual_password, title="Show Password")
+    return render_template("viewpassword.html", form=form, actual_password=False, title="View Password")
 
 
 
 
 if __name__ == '__main__':
     app.run(debug=True)
-
-
-#     {% for anniversary in anniversaries %}
-# <div class="col-12 col-md-6 mt-4">
-#     <div class="col-12">
-#         <div class="card">
-#             <h3 class="card-header bg-info text-white">{{ anniversary.types }}</h3>
-#             <div class="card-body">
-#                 <p class="h6" style="line-height: 35px;">
-#                     {{ anniversary.name }} has {{ anniversary.types }} on <mark style="color: green;">{{ anniversary.date }}</mark style="color: green;">
-#                 </p>
-#                 {% if anniversary.note %}
-#                     <strong> <mark style="color: green; line-height: 35px;"> Note: </mark></strong>
-#                     <p class="h6">
-#                         {{ anniversary.note }}
-#                     </p>
-#                 {% endif %}
-#              </div>  
-#              <div class="container">
-#                 <div class="row row-content">
-#                     <div class="col-6">
-#                         <form action="">
-#                             <div class="form-group ml-5">
-#                                 <button class="btn btn-primary" style="width: 100px;">Edit</button>
-#                             </div>
-#                         </form>
-#                     </div>
-#                     <div class="col-6">
-#                         <form action="">
-#                             <div class="form-group mr-5">
-#                                 <button class="btn btn-danger" style="width: 100px;">Delete</button>
-#                             </div>
-#                         </form>
-#                     </div>
-#                 </div>
-#             </div> 
-#         </div>
-#         </form>
-#     </div>
-# </div>
-
-# {% endfor %}
-
-# {% endblock %}
-

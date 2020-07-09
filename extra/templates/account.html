@@ -1,169 +1,192 @@
-{% extends "layout.html" %}
+{% extends "layout2.html" %}
 
 {% block title %}
-Account
+    Account
 {% endblock %}
 
-{% block bar %}
-<nav class="navbar navbar-dark navbar-expand-sm fixed-top" style="height: 100px;">
-    <div class="container">
-        <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#Navbar">
-                <span class="navbar-toggler-icon"></span>
-        </button>
-        <a class="navbar-brand mr-auto" href="#"></a>
-        
-        <div class="collapse navbar-collapse" id="Navbar">
-            <ul class="navbar-nav mr-auto">
-                
-                <li class="nav-item h5"><a class="nav-link" href="{{ url_for('home') }}"><span class="fa fa-home fa-lg">Home</span></a></li>
-                {% if current_user.is_authenticated %}
-                    <li class="nav-item h5"><a class="nav-link" href="{{ url_for('events') }}"><span class="fa fa-info fa-lg">Events</span></a></li>
-                    <a class="nav-item nav-link h5" href="{{ url_for('anniversary') }}">Anniversaries</a>
-                    <a class="nav-item nav-link h5" href="{{ url_for('tasks') }}">Tasks</a>
-                    <a class="nav-item nav-link h5" href="{{ url_for('passwords') }}">Passwords</a>
-                    <li class="nav-item h5"><a class="nav-link" href="{{ url_for('logout') }}"><span class="fa fa-list fa-lg">Log Out</span></a></li>
-                    <li class="nav-item h5 active"><a class="nav-link" href="{{ url_for('account') }}"><span class="fa fa-address-card fa-lg">Account</span></a></li>
-                {% else %}
-                    <li class="nav-item h5"><a class="nav-link" href="{{ url_for('about') }}"><span class="fa fa-info fa-lg">About</span></a></li>
-                    <li class="nav-item h5"><a class="nav-link" href="{{ url_for('login') }}"><span class="fa fa-list fa-lg">Log In</span></a></li>
-                    <li class="nav-item h5"><a class="nav-link" href="{{ url_for('register') }}"><span class="fa fa-address-card fa-lg">Sign Up</span></a></li>
-                {% endif %}
-            </ul>
-        </div>
-    </div>
-</nav>
+
+{% block barcontent %}
+<a class="nav-item nav-link h5" href="{{ url_for('events') }}">Events</a>
+<a class="nav-item nav-link h5" href="{{ url_for('anniversary') }}">Anniversaries</a>
+<a class="nav-item nav-link h5" href="{{ url_for('tasks') }}">Tasks</a>
+<a class="nav-item nav-link h5" href="{{ url_for('passwords') }}">Passwords</a>
 {% endblock %}
-{% block body %}
-    <div class="container" style="padding-top: 120px;">
-        <div class="col-12 col-md-6" style="border-radius: 20px; border-color:purple; border: 0.5px solid; background-color: ghostwhite;">
-            <div class="row row-content" >
-                <div class="col-6 col-md-2" style="padding-top : 10px;" >
-                    <img src="{{ image }}" alt="User" class="account-img rounded-circle">
-                </div>
-                <div class="offset-sm-3 col-6 col-md-5 mt-4" style="padding-top: 15px;">
-                    <div class="row row-content">
-                        <h4>{{ current_user.username }}</h4>
-                    </div>
-                    <div class="row row-content">
-                        <small>{{ current_user.email }}</small>
-                    </div>
-                </div>
+
+{% set legend1 = "Add" %}
+{% set legend2 = "Update" %}
+
+{% block content %}
+<style>
+    .account-img {
+    height: 125px;
+    width: 125px;
+    margin-right: 20px;
+    margin-bottom: 16px;
+}
+</style>
+<div class="container" style="padding-top: 120px;">
+    <div class="row justify-content-center"> 
+        <div class="col-12 col-md-8">
+           
+            <div class="row row-content justify-content-center">
+              <div class="mt-2 col-12 col-md-8">
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                  {% if messages %}
+                    {% for category, message in messages %}
+                      <div class="alert alert-{{ category }}">
+                        {{ message }}
+                      </div>
+                    {% endfor %}
+                  {% endif %}
+                {% endwith %}
+              </div>
             </div>
-        </div>
-        <div class="col-12 col-md-6">
-            <div class="col-12 mt-4">
-            {% with messages = get_flashed_messages(with_categories=true) %}
-                        {% if messages %}
-                        {% for category, message in messages %}
-                            <div class="alert alert-{{ category }} alert-dismissable">
-                            
-                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true" style="border: none; outline: none;">×</button>
-                            {{ message }}
+
+            <div class="row row-content justify-content-center";">
+                <div class="mt-2 col-12 col-md-8">
+                    <div class="row row-content" style="background-color: ghostwhite; border-radius: 20px;">
+                        <div class="col-3" style="padding-top: 10px;">
+                            <img src="{{ image }}" alt="User" class="account-img rounded-circle">
+                        </div>
+                        <div class="ml-3 col-7 text-dark text-left" style="padding-top: 32px;">
+                            <div class="row row-content justify-content-center">
+                                 <h4>{{ current_user.username }}</h4>
                             </div>
-                        {% endfor %}
-                        {% endif %}
-            {% endwith %}
-        </div>
-        </div>
-        <div class="col-12 col-md-6 mt-4">
-            <div class="col-12">
-                <form action="" method="POST" enctype="multipart/form-data">
-                    {{ form.hidden_tag() }}
-                <div class="card" style="border: none;">
-                    <h3 class="card-header bg-info text-white">Your Info</h3>
-                    <div class="card-body">
-                        <dl class="row">
-                            <dt class="mt-2 mt-sm-3 col-12">First Name</dt>
-                            <dd class="mt-2 mt-sm-3 col-12">
-                                {% if form.firstname.errors %}
-                                    {{ form.firstname(class="form-control is-invalid", autocomplete="off", placeholder="Enter firstname", id="firstname1") }}
-                                    <div class="invalid-feedback">
-                                        {% for error in form.firstname.errors %}
-                                            <span>{{ error }}</span>
-                                        {% endfor %}
-                                    </div>
-                                {% else %}
-                                    {{ form.firstname(class="form-control", autocomplete="off", placeholder="Enter firstname", id="firstname") }}
-                                {% endif %}
-                            </dd>
-                            <dt class="mt-2 mt-sm-3 col-12">Last Name</dt>
-                            <dd class="mt-2 mt-sm-3 col-12">
-                                {% if form.lastname.errors %}
-                                    {{ form.lastname(class="form-control is-invalid", autocomplete="off", placeholder="Enter lastname", id="lastname") }}
-                                    <div class="invalid-feedback">
-                                        {% for error in form.lastname.errors %}
-                                            <span>{{ error }}</span>
-                                        {% endfor %}
-                                    </div>
-                                {% else %}
-                                    {{ form.lastname(class="form-control", autocomplete="off", placeholder="Enter lastname", id="lastname") }}
-                                {% endif %}
-                            </dd>
-                            <dt class="mt-2 mt-sm-3 col-12">Username</dt>
-                            <dd class="mt-2 mt-sm-3 col-12">
-                                {% if form.username.errors %}
-                                    {{ form.username(class="form-control is-invalid", autocomplete="off", placeholder="Enter username", id="username") }}
-                                    <div class="invalid-feedback">
-                                        {% for error in form.username.errors %}
-                                            <span>{{ error }}</span>
-                                        {% endfor %}
-                                    </div>
-                                {% else %}
-                                    {{ form.username(class="form-control", autocomplete="off", placeholder="Enter username", id="username") }}
-                                {% endif %}
-                            </dd>
-                            <dt class="mt-2 mt-sm-3 col-12">Email</dt>
-                            <dd class="mt-2 mt-sm-3 col-12">
-                                {% if form.email.errors %}
-                                    {{ form.email(class="form-control is-invalid", autocomplete="off", placeholder="Enter email", id="email") }}
-                                    <div class="invalid-feedback">
-                                        {% for error in form.email.errors %}
-                                            <span>{{ error }}</span>
-                                        {% endfor %}
-                                    </div>
-                                {% else %}
-                                    {{ form.email(class="form-control", autocomplete="off", placeholder="Enter Email", id="email") }}
-                                {% endif %}
-                            </dd>
-                            <dt class="mt-2 mt-sm-3 col-12">Profile Picture</dt>
-                            <dd class="mt-2 mt-sm-3 col-12">
-                                
-                                 {{ form.profile() }}
-                                
-                                {% if form.profile.errors %}
-                                    <br>
-                                    {% for error in form.profile.errors %}
-                                        <span class="text-danger">{{ error }}</span><br>
-                                    {% endfor %}
-                                {% endif %}
+                            <div class="row row-content justify-content-center ml-3">
+                                <small>{{ current_user.email }}</small>      
+                            </div> 
+                        </div>
+                    </div>
+                  
+                </div>
+              </div>
 
-                            </dd>
-                            <dt class="mt-2 mt-sm-3 col-12"></dt>
-                            <dd class="mt-2 mt-sm-3 col-12">
-                                {{ form.submit(class="btn btn-danger") }}
-                            </dd>
-                        </dl>
+            <div class="row row-content justify-content-center">
+                <div class="col-12 col-md-8 mt-1">
+                    <div class="card mt-3" style="border:none; border-radius: 20px 20px 20px 20px;">
+                        <div class="h4 card-header bg-danger text-white" style="border-radius: 20px 20px 0px 0px;">Your Profile</div>
+                        <div class="card-body h6">
+                            <div class="row justify-content-center">
+                                <form method="POST" action="" class="col-12" enctype="multipart/form-data">
+                                    {{ form.hidden_tag() }}
+                                    <div class="form-group col-12 mt-2">
+                                        {{ form.firstname.label(class="form-control-label") }}
+                                        {% if form.firstname.errors %}
+                                            {{ form.firstname(class="form-control form-control-lg is-invalid", autocomplete="off") }}
+                                            <div class="invalid-feedback">
+                                                {% for error in form.firstname.errors %}
+                                                    <span>{{ error }}</span>
+                                                {% endfor %}
+                                            </div>
+                                        {% else %}
+                                            {{ form.firstname(class="form-control form-control-lg", autocomplete="off") }}
+                                        {% endif %}
+                                    </div>
+
+                                    <div class="form-group col-12 mt-2">
+                                        {{ form.lastname.label(class="form-control-label") }}
+                                        {% if form.lastname.errors %}
+                                            {{ form.lastname(class="form-control form-control-lg is-invalid", autocomplete="off") }}
+                                            <div class="invalid-feedback">
+                                                {% for error in form.lastname.errors %}
+                                                    <span>{{ error }}</span>
+                                                {% endfor %}
+                                            </div>
+                                        {% else %}
+                                            {{ form.lastname(class="form-control form-control-lg", autocomplete="off") }}
+                                        {% endif %}
+                                    </div>
+
+                                    <div class="form-group col-12 mt-2">
+                                        {{ form.username.label(class="form-control-label") }}
+                                        {% if form.username.errors %}
+                                            {{ form.username(class="form-control form-control-lg is-invalid", autocomplete="off") }}
+                                            <div class="invalid-feedback">
+                                                {% for error in form.username.errors %}
+                                                    <span>{{ error }}</span>
+                                                {% endfor %}
+                                            </div>
+                                        {% else %}
+                                            {{ form.username(class="form-control form-control-lg", autocomplete="off") }}
+                                        {% endif %}
+                                    </div>
+
+                                    <div class="form-group col-12 mt-2">
+                                        {{ form.email.label(class="form-control-label") }}
+                                        {% if form.email.errors %}
+                                            {{ form.email(class="form-control form-control-lg is-invalid", autocomplete="off") }}
+                                            <div class="invalid-feedback">
+                                                {% for error in form.email.errors %}
+                                                    <span>{{ error }}</span>
+                                                {% endfor %}
+                                            </div>
+                                        {% else %}
+                                            {{ form.email(class="form-control form-control-lg", autocomplete="off") }}
+                                        {% endif %}
+                                    </div>
+
+                                    <div class="form-group col-12 mt-2">
+                                        {{ form.profile.label(class="form-control-label") }}
+                                        {% if form.profile.errors %}
+                                            {{ form.profile(class="form-control form-control-lg is-invalid", autocomplete="off") }}
+                                            <div class="invalid-feedback">
+                                                {% for error in form.profile.errors %}
+                                                    <span>{{ error }}</span>
+                                                {% endfor %}
+                                            </div>
+                                        {% else %}
+                                            {{ form.profile(class="form-control form-control-lg", autocomplete="off") }}
+                                        {% endif %}
+                                    </div>
+
+                                    <div class="form-group col-12 mt-3">
+                                        {{ form.submit(class="btn btn-danger") }} 
+                                    </div>
+                                </form>
+                            </div>
+                            
+                        </div>
                     </div>
                 </div>
-                </form>
             </div>
         </div>
+        <div class="col-md-4 d-none d-md-block" style="background-color: #633942; border-radius: 20px 20px 20px 20px; height: 300px; position: sticky; top: 120px;">
+            <h3 class="text-white mt-3" style="text-align: center;">Store More</h3>
+            <p style="text-align: center;" >
+              <small><b>Get going! Add more information.</b></small>
+              <div class="list-group" style="border-radius: 20px 20px 20px 20px; text-align: center;">
+                {% if legend == legend1 %}
+                    <a href="{{ url_for('new_anniversary') }}" class="list-group-item list-group-item-action active">Add Anniversary</a>
+                {% else %}
+                    <a href="{{ url_for('new_anniversary') }}" class="list-group-item list-group-item-action">Add Anniversary</a>
+                {% endif %}
+                
+                <a href="{{ url_for('new_task') }}" class="list-group-item list-group-item-action">Add Task</a>
+
+                <a href="{{ url_for('new_password') }}" class="list-group-item list-group-item-action">Add Password</a>
+            </div>
+            </p>           
+        </div>
     </div>
-    
+</div>
+
 {% endblock %}
 
-<!-- <div class="container" style="padding-top: 120px;">
-    <div class="row row-content">
-        <div class="col-10 col-sm-6">
-        <div class="content-section">
-        <div class="media">
-            <img src="{{ image }}" alt="The User" class="rounded-circle account-img">
-            <div class="media-body">
-                <h2 class="account-heading">{{ current_user.username }}</h2>
-                <p class="text-secondary">{{ current_user.email }}</p>
-            </div>
-        </div>
-        </div>
-        </div>    
-    </div>
-</div> -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
