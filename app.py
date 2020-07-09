@@ -32,8 +32,7 @@ login_manager.login_message_category = 'info'
 @app.route("/")
 @app.route("/home")
 def home():
-    message='Atharva'
-    return render_template('home.html', message=message)
+    return render_template('home.html')
 
 @app.route("/about")
 def about():
@@ -62,7 +61,6 @@ def register():
     form = Registration()
    
     if form.validate_on_submit():
-        print("\n\nForm validated!\n\n")
         hashed = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
         
         user = User(firstname=form.firstname.data, lastname=form.lastname.data, username=form.username.data, email=form.email.data, password=hashed)
@@ -88,7 +86,6 @@ def login():
         # to redirect user 
 
             next_page = request.args.get('next')
-            print(type(next_page))
             if next_page:
                 flash(f"Login Successful!", 'success')
                 return redirect(next_page)
@@ -113,7 +110,11 @@ def save_image(profile):
     image_size = (960, 768)
     
     i = Image.open(profile)
+
     i.thumbnail(image_size)
+    if i.mode != 'RGB': # Necessary to save JPEG images
+        i = i.convert('RGB')
+
     i.save(image_path)
 
     return image_filename
@@ -303,7 +304,6 @@ def update_password(itsid):
 def delete_password(itsid):
     password_details = Password.query.get_or_404(itsid)
     if password_details.user != current_user:
-        print("I don't know why I am here!")
         abort(403)
     db.session.delete(password_details)
     db.session.commit()
