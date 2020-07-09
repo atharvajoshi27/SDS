@@ -1,8 +1,9 @@
 {% extends "layout2.html" %}
 
 {% block title %}
-    New Task
+    {{ legend }} Task
 {% endblock %}
+
 
 {% block barcontent %}
 <a class="nav-item nav-link h5" href="{{ url_for('events') }}">Events</a>
@@ -11,100 +12,120 @@
 <a class="nav-item nav-link h5" href="{{ url_for('passwords') }}">Passwords</a>
 {% endblock %}
 
+{% set legend1 = "Add" %}
+{% set legend2 = "Update" %}
+
 {% block content %}
-<main role="main" class="container" style="padding-top: 120px;">
-    <div class="row">
-        <div class="col-md-8">
-            {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-                {% for category, message in messages %}
-                <div class="alert alert-{{ category }}">
-                    {{ message }}
-                </div>
-                {% endfor %}
-            {% endif %}
-            {% endwith %}
- 
-        <div class="container mb-4">
-            <div class="row row-content">
-                <div class="col-12 col-md-2"></div>
-                <div class="col-12 col-md-8">
-                    <a href="{{ url_for('tasks') }}" type="button" class="btn btn-success">All Tasks</a>
-                </div>
-                <div class="col-12 col-md-2"></div>
-            </div>
-        </div> 
+
+<div class="container" style="padding-top: 120px;">
+    <div class="row justify-content-center"> 
         <div class="col-12 col-md-8">
-            <div class="content-section">
-            <form method="POST" action="">
-                {{ form.hidden_tag() }}
-            
-                <legend class="border-bottom mb-4">
-                 <h4>{{ legend }} Task</h4>
-                </legend>
-                <div class="form-group">
-                    {{ form.title.label(class="form-control-label") }}
-                    {% if form.title.errors %}
-                        {{ form.title(class="form-control form-control-lg is-invalid") }}
-                        <div class="invalid-feedback">
-                            {% for error in form.title.errors %}
-                                <span>{{ error }}</span>
-                            {% endfor %}
-                        </div>
-                    {% else %}
-                        {{ form.title(class="form-control form-control-lg") }}
-                    {% endif %}
-                </div>
-                
-                <div class="form-group">
-                    {{ form.note.label(class="form-control-label") }}
-
-                    {% if form.note.errors %}
-                        {{ form.note(class="form-control form-control-lg is-invalid") }}
-                        <div class="invalid-feedback">
-                            {% for error in form.note.errors %}
-                                <span>{{ error }}</span>
-                            {% endfor %}
-                        </div>
-                    {% else %}
-                        {{ form.note(class="form-control form-control-lg") }}
-                    {% endif %}
-                </div>
-
-                <div class="form-group">
-                    {{ form.lastdate.label(class="form-control-label") }}
-                    {% if form.lastdate.errors %}
-                        {{ form.lastdate(class="form-control form-control-lg is-invalid", type="lastdate") }}
-                        <div class="invalid-feedback">
-                            {% for error in form.lastdate.errors %}
-                                <span>{{ error }}</span>
-                            {% endfor %}
-                        </div>
-                    {% else %}
-                        {{ form.lastdate(class="form-control form-control-lg") }}
-                    {% endif %}
-                </div>
-                
-            </fieldset>
-            <div class="form-group">
-                {{ form.submit(class="btn btn-outline-info") }}
+            <div class="row row-content justify-content-center">
+              <a href="{{ url_for('tasks') }}" type="button" class="btn btn-success">All Tasks</a>
             </div>
-            </form>
+            <div class="row row-content justify-content-center">
+              <div class="mt-4 col-12 col-md-8">
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                  {% if messages %}
+                    {% for category, message in messages %}
+                      <div class="alert alert-{{ category }} mt-2">
+                        {{ message }}
+                      </div>
+                    {% endfor %}
+                  {% endif %}
+                {% endwith %}
+              </div>
             </div>
+            <div class="row row-content justify-content-center">
+                <div class="col-12 col-md-8 mt-2">
+                    <div class="card mt-3" style="border:none; border-radius: 20px 20px 20px 20px;">
+                        <div class="h4 card-header bg-danger text-white" style="border-radius: 20px 20px 0px 0px;">Add Task</div>
+                        <div class="card-body h5">
+                            <div class="row justify-content-center">
+                                <form method="POST" action="" class="col-12">
+                                    {{ form.hidden_tag() }}
+                                    <div class="form-group col-12 mt-2">
+                                        {{ form.title.label(class="form-control-label") }}
+                                        {% if form.title.errors %}
+                                            {{ form.title(class="form-control form-control-lg is-invalid", autocomplete="off") }}
+                                            <div class="invalid-feedback">
+                                                {% for error in form.title.errors %}
+                                                    <span>{{ error }}</span>
+                                                {% endfor %}
+                                            </div>
+                                        {% else %}
+                                            {{ form.title(class="form-control form-control-lg", autocomplete="off") }}
+                                        {% endif %}
+                                    </div>
+                                    
+                                    <div class="form-group col-12 mt-2">
+                                        {{ form.note.label(class="form-control-label") }}
+                    
+                                        {% if form.note.errors %}
+                                            {{ form.note(class="form-control form-control-lg is-invalid", autocomplete="off") }}
+                                            <div class="invalid-feedback">
+                                                {% for error in form.note.errors %}
+                                                    <span>{{ error }}</span>
+                                                {% endfor %}
+                                            </div>
+                                        {% else %}
+                                            {{ form.note(class="form-control form-control-lg", autocomplete="off") }}
+                                        {% endif %}
+                                    </div>
+                    
+                                    <div class="form-group col-12 mt-2">
+                                        {{ form.lastdate.label(class="form-control-label") }}
+                                        {% if form.lastdate.errors %}
+                                            {{ form.lastdate(class="form-control form-control-lg is-invalid", type="lastdate") }}
+                                            <div class="invalid-feedback">
+                                                {% for error in form.lastdate.errors %}
+                                                    <span>{{ error }}</span>
+                                                {% endfor %}
+                                            </div>
+                                        {% else %}
+                                            {{ form.lastdate(class="form-control form-control-lg") }}
+                                        {% endif %}
+                                    </div>
+
+                                    <div class="form-group col-12 mt-5">
+                                        {{ form.submit(class="btn btn-danger btn-block btn-lg", value=legend) }} 
+                                    </div>
+                                </form>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 d-none d-md-block" style="background-color: #633942; border-radius: 20px 20px 20px 20px; height: 300px; position: sticky; top: 120px;">
+            <h3 class="text-white mt-3" style="text-align: center;">Store More</h3>
+            <p style="text-align: center;" >
+              <small><b>Get going! Add more information.</b></small>
+              <div class="list-group" style="border-radius: 20px 20px 20px 20px; text-align: center;">
+                <a href="{{ url_for('new_anniversary') }}" class="list-group-item list-group-item-action">Add Anniversary</a>
+                {% if legend == legend1 %}
+                    <a href="{{ url_for('new_task') }}" class="list-group-item list-group-item-action active">Add Task</a>
+                {% else %}
+                    <a href="{{ url_for('new_task') }}" class="list-group-item list-group-item-action">Add Task</a>
+                {% endif %}
+
+                    <a href="{{ url_for('new_password') }}" class="list-group-item list-group-item-action">Add Password</a>
+            </div>
+            </p>           
         </div>
     </div>
-    <div class="col-md-4 d-none d-md-block" >
-        <div class="content-section"  style="z-index: 1; position: fixed;">
-          <h3>Our Sidebar</h3>
-          <p class='text-muted'>You can put any information here you'd like.
-            <ul class="list-group">
-                <a type="button" class="list-group-item list-group-item-light btn btn-primary" style="color: black;" href="{{ url_for('new_anniversary') }}">Add Anniversary</a>
-                <a type="button" class="list-group-item list-group-item-light btn btn-primary active" style="color: black;" href="{{ url_for('new_task') }}">Add Task</a>
-                <a type="button" class="list-group-item list-group-item-light btn btn-primary" style="color: black;" href="{{ url_for('new_password') }}">Add Password</a>
-            </ul>
-        </p>
-        </div>
-      </div>
 </div>
-</main>
+
 {% endblock %}
+
+
+
+
+
+
+
+
+
+
+

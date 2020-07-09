@@ -53,7 +53,7 @@
                         </div>
                         <div class="row justify-content-center mt-3">
                             <div class="col-4">
-                                <form action="{{ url_for('update_anniversary', itsid=anniversary.id) }}">
+                                <form action="{{ url_for('update_anniversary', itsid=anniversary.id, path_to_redirect='anniversary') }}">
                                     <button class="btn btn-primary btn-block" >Edit</button>
                                 </form>
                             </div>

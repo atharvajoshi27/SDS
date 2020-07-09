@@ -107,7 +107,7 @@ class TaskForm(FlaskForm):
 
 class PasswordForm(FlaskForm):
     # email = EmailField('Email', validators[DataRequired(), Email])
-    site = TextAreaField('Site', [validators.DataRequired()])
+    site = StringField('Site', [validators.DataRequired()])
 
     password = PasswordField('Password', validators=[DataRequired()])
 

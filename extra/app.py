@@ -170,9 +170,9 @@ def new_anniversary():
         return redirect(url_for('anniversary'))
     return render_template("create_anniversary.html", title="New Anniversary", form=form, legend='Add')
 
-@app.route("/anniversary/<int:itsid>/edit", methods=["GET", "POST"])
+@app.route("/anniversary/<int:itsid>/<path_to_redirect>/edit", methods=["GET", "POST"])
 @login_required
-def update_anniversary(itsid):
+def update_anniversary(itsid, path_to_redirect):
     anni = Anniversary.query.get_or_404(itsid)
     if anni.relative != current_user:
         abort(403)
@@ -185,12 +185,12 @@ def update_anniversary(itsid):
         anni.note = form.note.data
         db.session.commit()
         flash("Anniversary Updated Successfully!", 'success')
-        return redirect(url_for('anniversary'))
+        return redirect(url_for(path_to_redirect))
     elif request.method == "GET":
         form.name.data = anni.name
         form.date.data = anni.date
         form.types.data = anni.types
-        form.note.data = anni.types
+        form.note.data = anni.note
     return render_template("create_anniversary.html", title='Update Anniversary', form=form, legend='Update')
 
 @app.route("/anniversary/<int:itsid>/delete", methods=["POST"])
@@ -224,9 +224,9 @@ def new_task():
         return redirect(url_for('tasks'))
     return render_template("create_task.html", title="New Task", form=form, legend='Add')
 
-@app.route("/tasks/<int:itsid>/edit", methods=["GET", "POST"])
+@app.route("/tasks/<int:itsid>/<path_to_redirect>/edit", methods=["GET", "POST"])
 @login_required
-def update_task(itsid):
+def update_task(itsid, path_to_redirect):
     task = Task.query.get_or_404(itsid)
     if task.author != current_user:
         abort(403)
@@ -238,7 +238,7 @@ def update_task(itsid):
         task.note = form.note.data
         db.session.commit()
         flash("Task Updated Successfully!", 'success')
-        return redirect(url_for('tasks'))
+        return redirect(url_for(path_to_redirect))
     elif request.method == "GET":
         form.title.data = task.title
         form.lastdate.data = task.lastdate
