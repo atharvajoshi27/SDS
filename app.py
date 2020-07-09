@@ -44,25 +44,17 @@ def events():
     current_time = datetime.now()
     month = current_time.month
     day = current_time.day
-    # if day < 10:
-    #     day = "0" + str(day)
-    # if month < 10:
-    #     month = "0" + str(month)
-    # day = str(day)
-    # month = str(month)
     today = datetime.today().strftime('%Y-%m-%d')
     anniversaries = Anniversary.query.filter(and_((extract('month', Anniversary.date) == month), (extract('day', Anniversary.date) == day), (Anniversary.user_id == current_user.id)))
     tasks = Task.query.filter(and_((Task.lastdate == today), (Task.user_id == current_user.id)))
     
     if anniversaries.count() == 0:
-        print("came here")
+        
         anniversaries = []
     if tasks.count() == 0:
-        print("came here 2")
+        
         tasks = []
     
-    # anniversaries = Anniversary.query.filter(_and((extract('month', Anniversary.date) == month), extract('day' == day)))
-    # anniversaries =  Anniversary.query.filter(Anniversary.date.like(f'%{month}'+'-'+f'{day}')).all()
     return render_template("events.html", title='Events', anniversaries=anniversaries, tasks=tasks)
 
 @app.route("/register", methods=["GET", "POST"])
@@ -197,7 +189,6 @@ def update_anniversary(itsid, path_to_redirect):
 def delete_anniversary(itsid):
     anni = Anniversary.query.get_or_404(itsid)
     if anni.relative != current_user:
-        print("I don't know why I am here!")
         abort(403)
     db.session.delete(anni)
     db.session.commit()
@@ -249,7 +240,6 @@ def update_task(itsid, path_to_redirect):
 def delete_task(itsid):
     task = Task.query.get_or_404(itsid)
     if task.author != current_user:
-        print("I don't know why I am here!")
         abort(403)
     db.session.delete(task)
     db.session.commit()
@@ -275,9 +265,6 @@ def new_password():
 
         encrypted_text = CIPHER.encrypt(message) # Got the value
         encrypted_text = encrypted_text.decode()
-        # original_text = CIPHER.decrypt(encrypted_text)
-        # print(original_text.decode())
-        # encrypted_p = encrypt(MYKEY, form.password.data).decode('latin-1')
         password = Password(site=form.site.data, password=encrypted_text, hint=form.hint.data, user=current_user)
         db.session.add(password)
         db.session.commit()
